@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PostApp.Views.FirstAccessPage"
+             xmlns:controls="clr-namespace:PostApp.Controls;assembly=PostApp"
+             IsBusy="{Binding IsBusyActive, Mode=OneWay}">
+  <Grid Padding="16,0">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <Label Grid.Row="0" Text="Benvenuto" FontSize="40" FontAttributes="Italic" HorizontalOptions="Center"/>
+
+    <StackLayout Grid.Row="1">
+      <Label Text="Per poter accedere devi prima indicare il tuo comune di residenza"  Margin="0,16"/>
+
+      <Label Text="Comune di residenza" TextColor="Gray" Margin="0,16,0,0"/>
+
+      <controls:AutoCompleteView VerticalOptions="Center"
+                                 HorizontalOptions="Fill"
+                                 Suggestions="{Binding Items, Mode=TwoWay}"
+                                 ShowSearchButton="False"
+                                 SelectedCommand="{Binding CellSelectedCommand}"
+                                 SelectedItem="{Binding SelectedItem}">
+      </controls:AutoCompleteView>
+    </StackLayout>
+
+    <StackLayout Grid.Row="2" HorizontalOptions="FillAndExpand">
+
+      <StackLayout Spacing="10" StackLayout.Orientation="Horizontal">
+        <Label Text="Comune selezionato" TextColor="Gray" VerticalOptions="Center"/>
+        <Entry Text="{Binding Path=SelectedItem.comune}" IsEnabled="false" HorizontalOptions="FillAndExpand"/>
+      </StackLayout>
+
+      <Button FontSize="24"
+              BackgroundColor="Green"
+              TextColor="White"
+              Text="Accedi"
+              HeightRequest="60"
+              HorizontalOptions="FillAndExpand"
+              Command="{Binding AccessCommand}"
+              IsEnabled="{Binding AccediEnabled, Mode=OneWay}"/>
+    </StackLayout>
+  </Grid>
+</ContentPage>

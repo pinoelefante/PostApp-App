@@ -19,6 +19,8 @@ namespace PostApp.Droid
 
             base.OnCreate(bundle);
 
+            SecureStorageImplementation.StoragePassword = "kEW]xVU9ASQh";
+
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());
         }

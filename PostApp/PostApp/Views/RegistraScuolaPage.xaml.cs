@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Xamarin.Forms;
 
-namespace PostApp
+namespace PostApp.Views
 {
-    public partial class MainPage : ContentPage
+    public partial class RegistraScuolaPage : ContentPage
     {
-        public MainPage()
+        public RegistraScuolaPage()
         {
             InitializeComponent();
+            this.BindingContext = App.Locator.RegistraScuolaPageVM;
         }
     }
 }

@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PostApp.Views.RegistraEditorPage"
+             xmlns:controls="clr-namespace:PostApp.Controls;assembly=PostApp">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <ScrollView Grid.Row="0" Margin="16,0,0,0" Padding="0,0,16,0">
+      <Grid VerticalOptions="FillAndExpand">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackLayout>
+          <!-- Editor in attesa di approvazione -->
+        </StackLayout>
+        <StackLayout Grid.Row="1" HorizontalOptions="FillAndExpand">
+
+          <StackLayout>
+            <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
+              <Label Text="Categoria dell'editor" TextColor="Gray"/>
+              <Label Text="(*)" TextColor="Red" />
+            </StackLayout>
+            <Picker Items="{Binding Categorie, Mode=TwoWay}"/>
+          </StackLayout>
+
+          <StackLayout>
+            <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
+              <Label Text="Nome della scuola" TextColor="Gray"/>
+              <Label Text="(*)" TextColor="Red" />
+            </StackLayout>
+            <Entry HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding NomeScuola, Mode=TwoWay}" Placeholder="Istituto di Istruzione Superiore Don Lorenzo Milani"/>
+          </StackLayout>
+
+          <StackLayout>
+            <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
+              <Label Text="Città della scuola" TextColor="Gray"/>
+              <Label Text="(*)" TextColor="Red" />
+            </StackLayout>
+            <controls:AutoCompleteView VerticalOptions="Center"
+                                   HorizontalOptions="Fill"
+                                   Suggestions="{Binding ElencoCitta, Mode=TwoWay}"
+                                   ShowSearchButton="False"
+                                   SelectedCommand="{Binding CellSelectedCommand}"
+                                   SelectedItem="{Binding CittaSelezionata}">
+            </controls:AutoCompleteView>
+            <Entry IsEnabled="False" Text="{Binding Path=CittaSelezionata.comune, Mode=OneWay}"/>
+          </StackLayout>
+
+          <StackLayout>
+            <Label Text="Indirizzo della scuola" TextColor="Gray" Margin="0,16,0,0"/>
+            <Entry HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding IndirizzoScuola, Mode=TwoWay}" Placeholder="Via Guglielmo Marconi, 36"/>
+          </StackLayout>
+
+          <StackLayout>
+            <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
+              <Label Text="Indirizzo email o pec" TextColor="Gray"/>
+              <Label Text="(*)" TextColor="Red" />
+            </StackLayout>
+            <Entry HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding IndirizzoEmail, Mode=TwoWay}" Placeholder="mario.rossi@pec.it"/>
+          </StackLayout>
+
+          <StackLayout>
+            <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
+              <Label Text="Telefono" TextColor="Gray"/>
+              <Label Text="(*)" TextColor="Red" />
+            </StackLayout>
+            <Entry HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding Telefono, Mode=TwoWay}" Placeholder="021234567"/>
+          </StackLayout>
+          <StackLayout Margin="0,0,0,40"/>
+
+        </StackLayout>
+      </Grid>
+    </ScrollView>
+
+    <Button Grid.Row="1" IsEnabled="{Binding IsRegisterButtonEnable}" BackgroundColor="Green" TextColor="White" FontSize="24" Text="Registra" HorizontalOptions="FillAndExpand" Command="{Binding InviaRegistrazione}" HeightRequest="60" />
+
+  </Grid>
+</ContentPage>

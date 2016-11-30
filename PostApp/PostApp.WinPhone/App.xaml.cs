@@ -35,6 +35,7 @@ namespace PostApp.WinPhone
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+            Plugin.SecureStorage.WinSecureStorageBase.StoragePassword = "kEW]xVU9ASQh";
         }
 
         /// <summary>

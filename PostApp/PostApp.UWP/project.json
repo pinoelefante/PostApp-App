@@ -1,7 +1,11 @@
 ﻿{
   "dependencies": {
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
-    "Xamarin.Forms": "2.0.0.6482"
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
+    "MvvmLightLibs": "5.3.0",
+    "Newtonsoft.Json": "9.0.1",
+    "sameerIOTApps.Plugin.SecureStorage": "1.2.1",
+    "sqlite-net-pcl": "1.2.1",
+    "Xamarin.Forms": "2.3.2.127"
   },
   "frameworks": {
     "uap10.0": {}
