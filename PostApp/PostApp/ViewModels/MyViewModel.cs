@@ -11,5 +11,10 @@ namespace PostApp.ViewModels
     {
         private bool busyActive;
         public bool IsBusyActive { get { return busyActive; } set { Set(ref busyActive, value); } }
+
+        public virtual void NavigatedTo(object parameter = null)
+        {
+
+        }
     }
 }

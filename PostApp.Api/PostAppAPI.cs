@@ -184,7 +184,9 @@ namespace PostApp.Api
             return await sendRequest<List<News>>($"{SERVER_ADDRESS}/editor.php?action=GetAllMyNewsFrom", content);
         }
         #endregion
-        public async Task<Envelop<string>> RegistraScuola(string nomeScuola, string localitaScuola, string emailScuola, string telScuola,string indirizzoScuola, string cognomePreside,string nomePreside, string usernamePreside, string passwordPreside)
+
+        #region scuola.php
+        public async Task<Envelop<string>> RegistraScuola(string nomeScuola, string localitaScuola, string emailScuola, string telScuola, string indirizzoScuola, string cognomePreside, string nomePreside, string usernamePreside, string passwordPreside)
         {
             FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
             {
@@ -200,10 +202,57 @@ namespace PostApp.Api
             });
             return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=RegistraScuola", content);
         }
-        #region scuola.php
-
+        public async Task<Envelop<List<Scuola>>> GetMieScuoleWriter()
+        {
+            return await sendRequest<List<Scuola>>($"{SERVER_ADDRESS}/scuola.php?action=GetMieScuoleWriter", null);
+        }
+        public async Task<Envelop<List<Scuola>>> GetMieScuoleWriterDaApprovare()
+        {
+            return await sendRequestWithAction<List<Scuola>, List<Dictionary<string,string>>>($"{SERVER_ADDRESS}/scuola.php?action=GetMieScuoleWriterDaApprovare",(x)=> 
+            {
+                if (x!=null && x.Any())
+                {
+                    List<Scuola> scuole = new List<Scuola>(x.Count);
+                    foreach (var item in x)
+                    {
+                        Scuola s = new Scuola()
+                        {
+                            id = Int32.Parse(item["scuolaId"]),
+                            nome = item["scuolaNome"],
+                            ruolo = item["userRuolo"]
+                        };
+                        scuole.Add(s);
+                    }
+                    return scuole;
+                }
+                return new List<Scuola>(1);
+            }, null, true);
+        }
+        public async Task<Envelop<List<Scuola>>> GetMieScuoleReader()
+        {
+            return await sendRequest<List<Scuola>>($"{SERVER_ADDRESS}/scuola.php?action=GetMieScuoleReader", null);
+        }
+        public async Task<Envelop<string>> VerificaAccessoScuola(int idScuola)
+        {
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idScuola",idScuola.ToString())
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=VerificaAccesso", content);
+        }
+        public async Task<Envelop<string>> AccessoScuola(string username, string password)
+        {
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("username",username),
+                new KeyValuePair<string, string>("password",password)
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=AccessoScuola", content);
+        }
         #endregion
-        private async Task<Envelop<T>> sendRequest<T>(string url, HttpContent postContent = null, bool loginRequired = true)
+
+
+        private async Task<Envelop<T>> sendRequest<T>(string url, HttpContent postContent = null, bool loginRequired = true, Func<Dictionary<string,string>, T> action = null)
         {
             if(loginRequired && !IsLogged)
             {
@@ -231,10 +280,18 @@ namespace PostApp.Api
                     
                     envelop.time = DateTime.Parse(result["time"], CultureInfo.InvariantCulture);
                     envelop.response = (StatusCodes)Enum.ToObject(typeof(StatusCodes), Int32.Parse(result["response"]));
-                    if (typeof(T)==typeof(string))
-                        envelop.content = (T)(object)result["content"];
+                    if (action == null)
+                    {
+                        if (typeof(T) == typeof(string))
+                            envelop.content = (T)(object)result["content"];
+                        else
+                            envelop.content = JsonConvert.DeserializeObject<T>(result["content"]);
+                    }
                     else
-                        envelop.content = JsonConvert.DeserializeObject<T>(result["content"]);
+                    {
+                        var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(result["content"]);
+                        envelop.content = action.Invoke(values);
+                    }
                     return envelop;
                 }
                 else
@@ -244,6 +301,61 @@ namespace PostApp.Api
                 }
             }
             catch(Exception e)
+            {
+                Debug.WriteLine($"ERRORE - {e.Message}");
+                envelop.time = DateTime.Now;
+                envelop.response = StatusCodes.ERRORE_CONNESSIONE;
+            }
+            return envelop;
+        }
+        private async Task<Envelop<ContentType>> sendRequestWithAction<ContentType, ContentContainer>(string url, Func<ContentContainer, ContentType> parseAction, HttpContent postContent = null, bool loginRequired = true)
+        {
+            if (loginRequired && !IsLogged)
+            {
+                var response = await Access(AccessCode);
+                if (response.response == StatusCodes.OK)
+                {
+                    Debug.WriteLine("Login ok");
+                    IsLogged = true;
+                }
+                else
+                {
+                    Debug.WriteLine("Errore accesso");
+                }
+            }
+            Envelop<ContentType> envelop = new Envelop<ContentType>();
+            try
+            {
+                var response = await http.PostAsync(url, postContent);
+                Debug.WriteLine($"REQUEST at {url} - {response.StatusCode}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var output = await response.Content.ReadAsStringAsync();
+                    var result = JsonConvert.DeserializeObject<Dictionary<string, object>>(output);
+
+                    envelop.time = DateTime.Parse(result["time"].ToString(), CultureInfo.InvariantCulture);
+                    envelop.response = (StatusCodes)Enum.ToObject(typeof(StatusCodes), Int32.Parse(result["response"].ToString()));
+                    if (parseAction == null)
+                    {
+                        if (typeof(ContentType) == typeof(string))
+                            envelop.content = (ContentType)(object)result["content"];
+                        else
+                            envelop.content = JsonConvert.DeserializeObject<ContentType>(result["content"].ToString());
+                    }
+                    else
+                    {
+                        var values = JsonConvert.DeserializeObject<ContentContainer>(result["content"].ToString());
+                        envelop.content = parseAction.Invoke(values);
+                    }
+                    return envelop;
+                }
+                else
+                {
+                    envelop.time = DateTime.Now;
+                    envelop.response = StatusCodes.ERRORE_SERVER;
+                }
+            }
+            catch (Exception e)
             {
                 Debug.WriteLine($"ERRORE - {e.Message}");
                 envelop.time = DateTime.Now;

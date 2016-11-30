@@ -40,6 +40,8 @@
     </Compile>
     <Compile Include="Controls\AutoCompleteView.cs" />
     <Compile Include="Controls\MasterPageItem.cs" />
+    <Compile Include="Converters\ImagePathToUrlConverter.cs" />
+    <Compile Include="Converters\IntVisibility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DatabaseService.cs" />
     <Compile Include="Services\ISQLite.cs" />

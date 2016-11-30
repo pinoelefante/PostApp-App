@@ -22,7 +22,11 @@ namespace PostApp.ViewModels
             postApp = _postApp;
             Items = postApp.GetListaComuni();
         }
-        
+        public override async void NavigatedTo(object parameter = null)
+        {
+            RequestedAccessCode = await postApp.RequestAccessCode();
+        }
+
         private Envelop<string> RequestedAccessCode = null;
 
         private ObservableCollection<Comune> _items;
@@ -96,7 +100,7 @@ namespace PostApp.ViewModels
                     IsBusyActive = false;
                 }
             }));
-        private bool _accediEnabled = false, _isBusy;
+        private bool _accediEnabled = false;
         public bool AccediEnabled
         {
             get { return _accediEnabled; }

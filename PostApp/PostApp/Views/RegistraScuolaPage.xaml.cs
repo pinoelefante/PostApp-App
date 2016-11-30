@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PostApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,11 @@ namespace PostApp.Views
         {
             InitializeComponent();
             this.BindingContext = App.Locator.RegistraScuolaPageVM;
+        }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            (this.BindingContext as RegistraScuolaPageViewModel).NavigatedTo();
         }
     }
 }

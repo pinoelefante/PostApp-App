@@ -40,5 +40,11 @@ namespace PostApp.Api
 
         //scuola.php
         Task<Envelop<string>> RegistraScuola(string nomeScuola, string localitaScuola, string emailScuola, string telScuola, string indirizzoScuola, string cognomePreside, string nomePreside, string usernamePreside, string passwordPreside);
+        Task<Envelop<List<Scuola>>> GetMieScuoleWriter();
+        Task<Envelop<List<Scuola>>> GetMieScuoleWriterDaApprovare();
+        Task<Envelop<List<Scuola>>> GetMieScuoleReader();
+        Task<Envelop<string>> VerificaAccessoScuola(int idScuola);
+        Task<Envelop<string>> AccessoScuola(string username, string password);
+
     }
 }

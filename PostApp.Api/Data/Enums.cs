@@ -26,6 +26,7 @@ namespace PostApp.Api.Data
         FAIL = -1,
         RICHIESTA_MALFORMATA = -2,
         METODO_ASSENTE = -3,
+        SQL_FAIL = -4,
 
         OK = 1,
 

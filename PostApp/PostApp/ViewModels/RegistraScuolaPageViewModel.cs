@@ -16,16 +16,29 @@ namespace PostApp.ViewModels
     {
         private INavigationService navigation;
         private IPostAppApiService postApp;
+        
         public RegistraScuolaPageViewModel(IPostAppApiService _postApp, INavigationService navigationService)
         {
             navigation = navigationService;
             postApp = _postApp;
             ElencoCitta = postApp.GetListaComuni();
         }
-        public ObservableCollection<Comune> _elencoCitta;
-        public ObservableCollection<Comune> ElencoCitta { get { return _elencoCitta; } set { Set(ref _elencoCitta, value); } }
+        public override async void NavigatedTo(object parameter = null)
+        {
+            ElencoScuoleDaApprovare?.Clear();
+            var envelop = await postApp.GetMieScuoleWriterDaApprovare();
+            if(envelop.response == StatusCodes.OK)
+                foreach (var item in envelop.content)
+                    ElencoScuoleDaApprovare.Add(item);
+        }
+
         private string _cognomeDirigente = string.Empty, _nomeDirigente = string.Empty, _nomeScuola = string.Empty, _indirizzoEmail = string.Empty, _indirizzoScuola = string.Empty, _telefono = string.Empty, _usernameDirigente = string.Empty, _passwordDirigente = string.Empty;
         private Comune _cittaSelezionata;
+        private ObservableCollection<Comune> _elencoCitta;
+        private ObservableCollection<Scuola> _scuoleApprovare = new ObservableCollection<Scuola>();
+
+        public ObservableCollection<Scuola> ElencoScuoleDaApprovare { get { return _scuoleApprovare; } set { Set(ref _scuoleApprovare, value); } }
+        public ObservableCollection<Comune> ElencoCitta { get { return _elencoCitta; } set { Set(ref _elencoCitta, value); } }
         public string CognomeDirigente { get { return _cognomeDirigente; } set { Set(ref _cognomeDirigente, value); VerificaDati(); } }
         public string NomeDirigente { get { return _nomeDirigente; } set { Set(ref _nomeDirigente, value); VerificaDati(); } }
         public string NomeScuola { get { return _nomeScuola; } set { Set(ref _nomeScuola, value); VerificaDati(); } }

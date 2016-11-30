@@ -8,5 +8,6 @@ namespace PostApp.Api.Data
 {
     public class News
     {
+        public int id { get; set; }
     }
 }

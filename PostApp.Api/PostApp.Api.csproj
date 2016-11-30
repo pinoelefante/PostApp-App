@@ -40,6 +40,7 @@
     <Compile Include="Data\Enums.cs" />
     <Compile Include="Data\Envelop.cs" />
     <Compile Include="Data\News.cs" />
+    <Compile Include="Data\Scuola.cs" />
     <Compile Include="IPostAppApiService.cs" />
     <Compile Include="PostAppAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
