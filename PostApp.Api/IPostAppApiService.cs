@@ -31,7 +31,7 @@ namespace PostApp.Api
         Task<Envelop<string>> FollowEditor(int idEditor);
         Task<Envelop<string>> UnfollowEditor(int idEditor);
         Task<Envelop<List<News>>> GetNotificationsEditor(DateTime from);
-        Task<Envelop<List<News>>> ThanksForNewsEditor(int idNews);
+        Task<Envelop<string>> ThanksForNewsEditor(int idNews);
         Task<Envelop<News>> LeggiNewsEditor(int idNews);
         Task<Envelop<List<News>>> GetNewsEditor(int idEditor);
         Task<Envelop<List<Editor>>> GetEditorsByLocation(string location);

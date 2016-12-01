@@ -18,5 +18,6 @@ namespace PostApp.Api.Data
         public string geo_coordinate { get; set; }
         public string descrizione { get; set; }
         public string immagine { get; set; }
+        public string ruolo { get; set; }
     }
 }

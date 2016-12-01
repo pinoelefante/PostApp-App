@@ -73,15 +73,69 @@ namespace PostApp.Api
         }
         public async Task<Envelop<List<Editor>>> WriterEditors()
         {
-            return await sendRequest<List<Editor>>($"{SERVER_ADDRESS}/editor.php?action=WriterEditors");
+            return await sendRequestWithAction<List<Editor>, List<Dictionary<string, string>>>($"{SERVER_ADDRESS}/editor.php?action=WriterEditors", (x) =>
+            {
+                if(x!=null && x.Any())
+                {
+                    List<Editor> editors = new List<Editor>(x.Count);
+                    foreach (var item in x)
+                    {
+                        Editor ed = new Editor()
+                        {
+                            id = Int32.Parse(item["id"]),
+                            nome = item["nome"],
+                            ruolo = item["ruolo"]
+                        };
+                        editors.Add(ed);
+                    }
+                    return editors;
+                }
+                return new List<Editor>(1);
+            });
         }
         public async Task<Envelop<List<Editor>>> WriterEditorsDaApprovare()
         {
-            return await sendRequest<List<Editor>>($"{SERVER_ADDRESS}/editor.php?action=WriterEditorsDaApprovare");
+            return await sendRequestWithAction<List<Editor>, List<Dictionary<string, string>>>($"{SERVER_ADDRESS}/editor.php?action=WriterEditorsDaApprovare", (x) =>
+            {
+                if (x != null && x.Any())
+                {
+                    List<Editor> editors = new List<Editor>(x.Count);
+                    foreach (var item in x)
+                    {
+                        Editor ed = new Editor()
+                        {
+                            id = Int32.Parse(item["id"]),
+                            nome = item["nome"],
+                            ruolo = item["ruolo"]
+                        };
+                        editors.Add(ed);
+                    }
+                    return editors;
+                }
+                return new List<Editor>(1);
+            });
         }
         public async Task<Envelop<List<Editor>>> ReaderEditors()
         {
-            return await sendRequest<List<Editor>>($"{SERVER_ADDRESS}/editor.php?action=ReaderEditors");
+            return await sendRequestWithAction<List<Editor>, List<Dictionary<string, string>>>($"{SERVER_ADDRESS}/editor.php?action=ReaderEditors", (x) =>
+            {
+                if (x != null && x.Any())
+                {
+                    List<Editor> editors = new List<Editor>(x.Count);
+                    foreach (var item in x)
+                    {
+                        Editor ed = new Editor()
+                        {
+                            id = Int32.Parse(item["id"]),
+                            nome = item["nome"],
+                            immagine = item["immagine"]
+                        };
+                        editors.Add(ed);
+                    }
+                    return editors;
+                }
+                return new List<Editor>(1);
+            });
         }
         public async Task<Envelop<string>> AddDescrizioneEditor(int idEditor, string descrizione)
         {
@@ -135,15 +189,40 @@ namespace PostApp.Api
             {
                 new KeyValuePair<string, string>("from",from.ToString("yyyy-MM-dd HH:mm:ss"))
             });
-            return await sendRequest<List<News>>($"{SERVER_ADDRESS}/editor.php?action=GetNotifications", content);
+            //return await sendRequest<List<News>>($"{SERVER_ADDRESS}/editor.php?action=GetNotifications", content);
+            return await sendRequestWithAction<List<News>, List<Dictionary<string, string>>>($"{SERVER_ADDRESS}/editor.php?action=GetNotifications", (x) =>
+            {
+                if(x!=null && x.Any())
+                {
+                    List<News> news = new List<News>(x.Count);
+                    foreach (var item in x)
+                    {
+                        News n = new News()
+                        {
+                            publisherId = Int32.Parse(item["editorId"]),
+                            publisherNome = item["editorNome"],
+                            id = Int32.Parse(item["newsId"]),
+                            titolo = item["titolo"],
+                            immagine = item["immagine"],
+                            posizione = item["posizione"],
+                            data = DateTime.Parse(item["data"], CultureInfo.InvariantCulture),
+                            tipoNews = NewsType.EDITOR_NEWS
+                            //testo = item["corpo"]
+                    };
+                        news.Add(n);
+                    }
+                    return news;
+                }
+                return new List<News>(1);
+            }, content);
         }
-        public async Task<Envelop<List<News>>> ThanksForNewsEditor(int idNews)
+        public async Task<Envelop<string>> ThanksForNewsEditor(int idNews)
         {
             FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
             {
                 new KeyValuePair<string, string>("idNews",idNews.ToString())
             });
-            return await sendRequest<List<News>>($"{SERVER_ADDRESS}/editor.php?action=ThanksForNews", content);
+            return await sendRequest<string>($"{SERVER_ADDRESS}/editor.php?action=ThanksForNews", content);
         }
         public async Task<Envelop<News>> LeggiNewsEditor(int idNews)
         {
@@ -151,7 +230,29 @@ namespace PostApp.Api
             {
                 new KeyValuePair<string, string>("idNews",idNews.ToString())
             });
-            return await sendRequest<News>($"{SERVER_ADDRESS}/editor.php?action=LeggiNews", content);
+            //return await sendRequest<News>($"{SERVER_ADDRESS}/editor.php?action=LeggiNews", content);
+            return await sendRequestWithAction<News, Dictionary<string, string>>($"{SERVER_ADDRESS}/editor.php?action=LeggiNews", (x) =>
+            {
+                if(x!=null && x.Any())
+                {
+                    News n = new News()
+                    {
+                        publisherId = Int32.Parse(x["editorId"]),
+                        publisherNome = x["editorNome"],
+                        id = Int32.Parse(x["newsId"]),
+                        titolo = x["titolo"],
+                        immagine = x["immagine"],
+                        testo = x["corpo"],
+                        data = DateTime.Parse(x["data"], CultureInfo.InvariantCulture),
+                        posizione = x["posizione"],
+                        thankyou = Int32.Parse(x["thankyou"]),
+                        letta = 1,
+                        tipoNews = NewsType.EDITOR_NEWS
+                    };
+                    return n;
+                }
+                return null;
+            }, content);
         }
         public async Task<Envelop<List<News>>> GetNewsEditor(int idEditor)
         {
@@ -159,7 +260,32 @@ namespace PostApp.Api
             {
                 new KeyValuePair<string, string>("idEditor",idEditor.ToString())
             });
-            return await sendRequest<List<News>>($"{SERVER_ADDRESS}/editor.php?action=GetNewsEditor", content);
+            //return await sendRequest<List<News>>($"{SERVER_ADDRESS}/editor.php?action=GetNewsEditor", content);
+            return await sendRequestWithAction<List<News>, List<Dictionary<string, string>>>($"{SERVER_ADDRESS}/editor.php?action=GetNewsEditor", (x)=>
+            {
+                if(x!=null && x.Any())
+                {
+                    List<News> news = new List<News>(x.Count);
+                    foreach (var item in x)
+                    {
+                        News n = new News()
+                        {
+                            publisherId = Int32.Parse(item["editorId"]),
+                            publisherNome = item["editorNome"],
+                            id = Int32.Parse(item["newsId"]),
+                            titolo = item["titolo"],
+                            immagine = item["immagine"],
+                            //testo = item["corpo"],
+                            data = DateTime.Parse(item["data"], CultureInfo.InvariantCulture),
+                            posizione = item["posizione"],
+                            tipoNews = NewsType.EDITOR_NEWS
+                        };
+                        news.Add(n);
+                    }
+                    return news;
+                }
+                return new List<News>(1);
+            }, content);
         }
         public async Task<Envelop<List<Editor>>> GetEditorsByLocation(string location)
         {
@@ -167,11 +293,47 @@ namespace PostApp.Api
             {
                 new KeyValuePair<string, string>("localita",location)
             });
-            return await sendRequest<List<Editor>>($"{SERVER_ADDRESS}/editor.php?action=GetEditorsByLocation", content);
+            return await sendRequestWithAction<List<Editor>, List<Dictionary<string, string>>>($"{SERVER_ADDRESS}/editor.php?action=GetEditorsByLocation", (x) =>
+            {
+                if(x!=null & x.Any())
+                {
+                    List<Editor> editors = new List<Editor>();
+                    foreach (var item in x)
+                    {
+                        Editor e = new Editor()
+                        {
+                            id = Int32.Parse(item["editorId"]),
+                            nome = item["editorNome"],
+                            categoria = item["editorCategoria"],
+                            immagine = item["immagine"]
+                        };
+                        editors.Add(e);
+                    }
+                    return editors;
+                }
+                return new List<Editor>(1);
+            }, content);
         }
         public async Task<Envelop<List<Comune>>> GetComuniConEditors()
         {
-            return await sendRequest<List<Comune>>($"{SERVER_ADDRESS}/editor.php?action=GetComuniConEditors");
+            return await sendRequestWithAction<List<Comune>, List<Dictionary<string, string>>>($"{SERVER_ADDRESS}/editor.php?action=GetComuniConEditors", (x) =>
+            {
+                if(x!=null && x.Any())
+                {
+                    List<Comune> comuni = new List<Comune>(x.Count);
+                    foreach (var item in x)
+                    {
+                        Comune comune = new Comune()
+                        {
+                            comune = item["comune"],
+                            istat = item["id"]
+                        };
+                        comuni.Add(comune);
+                    }
+                    return comuni;
+                }
+                return new List<Comune>(1);
+            });
         }
         public async Task<Envelop<List<News>>> GetAllMyNewsFrom(int? fromId)
         {
@@ -181,7 +343,32 @@ namespace PostApp.Api
                 {
                     new KeyValuePair<string, string>("lastId",fromId.ToString())
                 });
-            return await sendRequest<List<News>>($"{SERVER_ADDRESS}/editor.php?action=GetAllMyNewsFrom", content);
+            return await sendRequestWithAction<List<News>, List<Dictionary<string, string>>>($"{SERVER_ADDRESS}/editor.php?action=GetAllMyNewsFrom", (x) =>
+            {
+                if(x!=null && x.Any())
+                {
+                    List<News> news = new List<News>(x.Count);
+                    foreach (var item in x)
+                    {
+                        News n = new News()
+                        {
+                            publisherId = Int32.Parse(item["editorId"]),
+                            publisherNome = item["editorNome"],
+                            id = Int32.Parse(item["newsId"]),
+                            titolo = item["titolo"],
+                            immagine = item["immagine"],
+                            testo = item["corpo"],
+                            data = DateTime.Parse(item["data"], CultureInfo.InvariantCulture),
+                            posizione = item["posizione"],
+                            tipoNews = NewsType.EDITOR_NEWS,
+                            letta = Int32.Parse(item["letta"])
+                        };
+                        news.Add(n);
+                    }
+                    return news;
+                }
+                return new List<News>(1);
+            }, content);
         }
         #endregion
 
