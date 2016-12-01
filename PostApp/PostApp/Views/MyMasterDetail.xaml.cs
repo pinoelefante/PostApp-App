@@ -21,7 +21,7 @@ namespace PostApp.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            App.Locator.NavigationService.Initialize(navigationPage);
+            App.Locator.MyMasterDetailVM.RegistraNavigation(navigationPage);
         }
         protected override bool OnBackButtonPressed()
         {
@@ -32,18 +32,15 @@ namespace PostApp.Views
         void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var item = e.SelectedItem as MasterPageItem;
-            if (item == lastSelectedItem) //blocca la navigazione se viene selezionato la voce corrente del menu
+            if (item == null || item == lastSelectedItem) //blocca la navigazione se viene selezionato la voce corrente del menu
             {
                 IsPresented = false;
                 return;
             }
-            if (item != null)
-            {
-                lastSelectedItem = item;
-                VM.NavigateCommand.Execute(item.Command);
-                //navigationPage.Navigation.PushAsync((Page)Activator.CreateInstance(item.TargetType));
-                IsPresented = false;
-            }
+            lastSelectedItem = item;
+            VM.NavigateCommand.Execute(item.Command);
+            masterPage.ListView.SelectedItem = null;
+            IsPresented = false;
         }
     }
 }

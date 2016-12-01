@@ -22,5 +22,22 @@ namespace PostApp.ViewModels
         }
         public ObservableCollection<News> ElencoNews { get; } = new ObservableCollection<News>();
         private int? editorLastId = null;
+
+        public override async void NavigatedTo(object parameter = null)
+        {
+            if (!ElencoNews.Any())
+            {
+                IsBusyActive = true;
+                var envelop = await postApp.GetAllMyNewsFrom(editorLastId);
+                if (envelop.response == StatusCodes.OK)
+                {
+                    foreach (var item in envelop.content)
+                        ElencoNews.Add(item);
+                    if (ElencoNews.Any())
+                        editorLastId = ElencoNews.Last().id;
+                }
+                IsBusyActive = false;
+            }
+        }
     }
 }
