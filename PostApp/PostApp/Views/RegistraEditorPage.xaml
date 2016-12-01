@@ -25,7 +25,7 @@
               <Label Text="Categoria dell'editor" TextColor="Gray"/>
               <Label Text="(*)" TextColor="Red" />
             </StackLayout>
-            <!--<Picker Items="{Binding Categorie.Keys, Mode=OneWay}"/>-->
+            <Picker x:Name="categoryPicker" SelectedIndex="{Binding CategoriaIndexSelected, Mode=TwoWay}"/>
           </StackLayout>
 
           <StackLayout>
