@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PostApp.Views.RegistraEditorPage"
-             xmlns:controls="clr-namespace:PostApp.Controls;assembly=PostApp">
+             xmlns:controls="clr-namespace:PostApp.Controls;assembly=PostApp"
+             Title="Registra editor">
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="*"/>
@@ -25,20 +26,12 @@
               <Label Text="Categoria dell'editor" TextColor="Gray"/>
               <Label Text="(*)" TextColor="Red" />
             </StackLayout>
-            <Picker x:Name="categoryPicker" SelectedIndex="{Binding CategoriaIndexSelected, Mode=TwoWay}"/>
+            <Picker x:Name="categoryPicker" Title="Categoria editor" SelectedIndex="{Binding CategoriaIndexSelected, Mode=TwoWay}"/>
           </StackLayout>
 
           <StackLayout>
             <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
-              <Label Text="Nome della scuola" TextColor="Gray"/>
-              <Label Text="(*)" TextColor="Red" />
-            </StackLayout>
-            <Entry HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding NomeScuola, Mode=TwoWay}" Placeholder="Istituto di Istruzione Superiore Don Lorenzo Milani"/>
-          </StackLayout>
-
-          <StackLayout>
-            <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
-              <Label Text="Città della scuola" TextColor="Gray"/>
+              <Label Text="Città dell'editor" TextColor="Gray"/>
               <Label Text="(*)" TextColor="Red" />
             </StackLayout>
             <controls:AutoCompleteView VerticalOptions="Center"
@@ -52,8 +45,16 @@
           </StackLayout>
 
           <StackLayout>
-            <Label Text="Indirizzo della scuola" TextColor="Gray" Margin="0,16,0,0"/>
-            <Entry HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding IndirizzoScuola, Mode=TwoWay}" Placeholder="Via Guglielmo Marconi, 36"/>
+            <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
+              <Label Text="Nome dell'editor" TextColor="Gray"/>
+              <Label Text="(*)" TextColor="Red" />
+            </StackLayout>
+            <Entry IsEnabled="{Binding IsNomeEnabled}" HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding NomeEditor, Mode=TwoWay}" Placeholder="Comune di Roma"/>
+          </StackLayout>
+
+          <StackLayout>
+            <Label Text="Indirizzo dell'editor" TextColor="Gray" Margin="0,16,0,0"/>
+            <Entry HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding IndirizzoEditor, Mode=TwoWay}" Placeholder="Via Guglielmo Marconi, 36"/>
           </StackLayout>
 
           <StackLayout>

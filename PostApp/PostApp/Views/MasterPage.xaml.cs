@@ -20,6 +20,13 @@ namespace PostApp.Views
             var masterPageItems = new List<MasterPageItem>();
             masterPageItems.Add(new MasterPageItem
             {
+                Title = "Home",
+                //IconSource = "todo.png",
+                Command = ViewModelLocator.MainPage,
+                TargetType = typeof(FirstAccessPage)
+            });
+            masterPageItems.Add(new MasterPageItem
+            {
                 Title = "First Access",
                 //IconSource = "todo.png",
                 Command = ViewModelLocator.FirstAccessPage,

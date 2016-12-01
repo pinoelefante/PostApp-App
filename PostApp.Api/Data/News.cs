@@ -19,5 +19,30 @@ namespace PostApp.Api.Data
         public int publisherId { get; set; }
         public int letta { get; set; }
         public int thankyou { get; set; }
+        public string immagineThumb
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(immagine))
+                    return null;
+                return $"thumb.{immagine}";
+            }
+        }
+        public string immagineFull
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(immagine))
+                    return null;
+                return $"{immagine}";
+            }
+        }
+        public string testoAnteprima
+        {
+            get
+            {
+                return testo.Substring(0, testo.Length / 2) + "...\n[Apri la news per continuare a leggere]";
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Views;
 using PostApp.Api;
 using PostApp.Api.Data;
+using PostApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,11 +17,16 @@ namespace PostApp.ViewModels
     {
         private INavigationService navigation;
         private IPostAppApiService postApp;
+        private ToastNotificationService toast;
+        private ValidationService validation;
         
-        public RegistraScuolaPageViewModel(IPostAppApiService _postApp, INavigationService navigationService)
+        public RegistraScuolaPageViewModel(IPostAppApiService _postApp, INavigationService navigationService, ToastNotificationService _toast, ValidationService _val)
         {
             navigation = navigationService;
             postApp = _postApp;
+            toast = _toast;
+            validation = _val;
+
             ElencoCitta = postApp.GetListaComuni();
         }
         public override async void NavigatedTo(object parameter = null)
@@ -71,11 +77,12 @@ namespace PostApp.ViewModels
                     IsBusyActive = false;
                     if(envelop.response == StatusCodes.OK)
                     {
-                        //TODO comunicare il successo dell'operazione
-                        navigation.NavigateTo(ViewModelLocator.MyMasterDetailPage);
+                        toast.Notify("Registrazione scuola", "La registrazione è avvenuta con successo ed è in attesa di approvazione");
+                        navigation.NavigateTo(ViewModelLocator.MainPage);
                     }
                     else
                     {
+                        toast.Notify("Registrazione scuola", $"Errore {envelop.response}\nSi è verificato un errore durante la registrazione della scuola. Riprova più tardi o contatta l'assistenza");
                         Debug.WriteLine($"Errore {envelop.response}");
                     }
                 }

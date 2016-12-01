@@ -8,12 +8,11 @@ using Xamarin.Forms;
 
 namespace PostApp.Converters
 {
-    public class IntVisibility : IValueConverter
+    public class NotIntBoolean : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var i = System.Convert.ToInt32(value);
-            return i > 0 ? true : false;
+            return System.Convert.ToInt32(value) == 0 ? true : false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

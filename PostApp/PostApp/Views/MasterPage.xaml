@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PostApp.Views.MasterPage"
              Padding="0,10,0,0"
-             Title="PostApp - Menu">
+             Title="PostApp">
   <ContentPage.Content>
     <StackLayout VerticalOptions="FillAndExpand">
       <ListView x:Name="listView" VerticalOptions="FillAndExpand" SeparatorVisibility="None" ListView.RowHeight="40">

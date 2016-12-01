@@ -25,6 +25,10 @@ namespace PostApp.iOS
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
 
+            //per notifiche toast
+            var settings = UIUserNotificationSettings.GetSettingsForTypes(UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound, new NSSet());
+            UIApplication.SharedApplication.RegisterUserNotificationSettings(settings);
+
             return base.FinishedLaunching(app, options);
         }
     }

@@ -4,7 +4,8 @@
              x:Class="PostApp.Views.FirstAccessPage"
              xmlns:controls="clr-namespace:PostApp.Controls;assembly=PostApp"
              xmlns:conv="clr-namespace:PostApp.Converters;assembly=PostApp"
-             IsBusy="{Binding IsBusyActive, Mode=OneWay}">
+             IsBusy="{Binding IsBusyActive, Mode=OneWay}"
+             Title="">
   <ContentPage.Resources>
     <ResourceDictionary>
       <conv:NullBoolean x:Key="NullBoolean"/>

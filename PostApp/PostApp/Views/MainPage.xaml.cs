@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PostApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,13 @@ namespace PostApp.Views
         public MainPage()
         {
             InitializeComponent();
+            this.BindingContext = App.Locator.MainPageViewModel;
+        }
+        private MainViewModel VM => this.BindingContext as MainViewModel;
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            VM.NavigatedTo();
         }
     }
 }

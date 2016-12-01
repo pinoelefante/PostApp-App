@@ -4,11 +4,12 @@
              x:Class="PostApp.Views.RegistraScuolaPage"
              xmlns:controls="clr-namespace:PostApp.Controls;assembly=PostApp"
              xmlns:conv="clr-namespace:PostApp.Converters;assembly=PostApp"
-             IsBusy="{Binding IsBusyActive, Mode=OneWay}">
+             IsBusy="{Binding IsBusyActive, Mode=OneWay}"
+             Title="Registra scuola">
   <ContentPage.Resources>
     <ResourceDictionary>
       <conv:ImagePathToUrlConverter x:Key="imgConverter"></conv:ImagePathToUrlConverter>
-      <conv:IntVisibility x:Key="IntVisibility"/>
+      <conv:IntBoolean x:Key="IntVisibility"/>
     </ResourceDictionary>
   </ContentPage.Resources>
   <Grid>
@@ -73,7 +74,7 @@
           </StackLayout>
 
           <StackLayout>
-            <StackLayout Orientation="Horizontal">
+            <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
               <Label Text="Username del dirigente" TextColor="Gray"/>
               <Label Text="(*)" TextColor="Red" />
             </StackLayout>
@@ -134,7 +135,6 @@
             <Entry HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding Telefono, Mode=TwoWay}" Placeholder="021234567"/>
           </StackLayout>
           <StackLayout Margin="0,0,0,40"/>
-
         </StackLayout>
       </Grid>
     </ScrollView>

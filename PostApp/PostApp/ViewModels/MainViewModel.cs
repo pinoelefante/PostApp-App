@@ -35,6 +35,7 @@ namespace PostApp.ViewModels
                         ElencoNews.Add(item);
                     if (ElencoNews.Any())
                         editorLastId = ElencoNews.Last().id;
+                    RaisePropertyChanged(() => ElencoNews);
                 }
                 IsBusyActive = false;
             }
