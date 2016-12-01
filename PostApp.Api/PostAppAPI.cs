@@ -439,7 +439,7 @@ namespace PostApp.Api
         #endregion
 
 
-        private async Task<Envelop<T>> sendRequest<T>(string url, HttpContent postContent = null, bool loginRequired = true, Func<Dictionary<string,string>, T> action = null)
+        private async Task<Envelop<T>> sendRequest<T>(string url, HttpContent postContent = null, bool loginRequired = true)
         {
             if(loginRequired && !IsLogged)
             {
@@ -467,18 +467,10 @@ namespace PostApp.Api
                     
                     envelop.time = DateTime.Parse(result["time"], CultureInfo.InvariantCulture);
                     envelop.response = (StatusCodes)Enum.ToObject(typeof(StatusCodes), Int32.Parse(result["response"]));
-                    if (action == null)
-                    {
-                        if (typeof(T) == typeof(string))
-                            envelop.content = (T)(object)result["content"];
-                        else
-                            envelop.content = JsonConvert.DeserializeObject<T>(result["content"]);
-                    }
+                    if (typeof(T) == typeof(string))
+                        envelop.content = (T)(object)result["content"];
                     else
-                    {
-                        var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(result["content"]);
-                        envelop.content = action.Invoke(values);
-                    }
+                        envelop.content = JsonConvert.DeserializeObject<T>(result["content"]);
                     return envelop;
                 }
                 else
@@ -497,6 +489,9 @@ namespace PostApp.Api
         }
         private async Task<Envelop<ContentType>> sendRequestWithAction<ContentType, ContentContainer>(string url, Func<ContentContainer, ContentType> parseAction, HttpContent postContent = null, bool loginRequired = true)
         {
+            if (parseAction == null)
+                return await sendRequest<ContentType>(url, postContent, loginRequired);
+
             if (loginRequired && !IsLogged)
             {
                 var response = await Access(AccessCode);
@@ -522,18 +517,8 @@ namespace PostApp.Api
 
                     envelop.time = DateTime.Parse(result["time"].ToString(), CultureInfo.InvariantCulture);
                     envelop.response = (StatusCodes)Enum.ToObject(typeof(StatusCodes), Int32.Parse(result["response"].ToString()));
-                    if (parseAction == null)
-                    {
-                        if (typeof(ContentType) == typeof(string))
-                            envelop.content = (ContentType)(object)result["content"];
-                        else
-                            envelop.content = JsonConvert.DeserializeObject<ContentType>(result["content"].ToString());
-                    }
-                    else
-                    {
-                        var values = JsonConvert.DeserializeObject<ContentContainer>(result["content"].ToString());
-                        envelop.content = parseAction.Invoke(values);
-                    }
+                    var values = JsonConvert.DeserializeObject<ContentContainer>(result["content"].ToString());
+                    envelop.content = parseAction.Invoke(values);
                     return envelop;
                 }
                 else

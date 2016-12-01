@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Views;
 using Plugin.SecureStorage;
 using PostApp.Api;
 using PostApp.Api.Data;
+using PostApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -93,8 +94,8 @@ namespace PostApp.ViewModels
                     else
                     {
                         CrossSecureStorage.Current.SetValue("AccessCode", RequestedAccessCode.content);
-                        
-                        navigation.NavigateTo(ViewModelLocator.MyMasterDetailPage);
+                        postApp.SetAccessCode(RequestedAccessCode.content);
+                        App.Current.MainPage = new MyMasterDetail();
                     }
                     AccediEnabled = true;
                     IsBusyActive = false;

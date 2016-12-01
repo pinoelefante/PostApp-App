@@ -16,12 +16,19 @@ namespace PostApp.Views
         {
             InitializeComponent();
             masterPage.ListView.ItemSelected += OnItemSelected;
-            App.Locator.NavigationService.Initialize(navigationPage);
             this.BindingContext = App.Locator.MyMasterDetailVM;
+        }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            App.Locator.NavigationService.Initialize(navigationPage);
+        }
+        protected override bool OnBackButtonPressed()
+        {
+            return base.OnBackButtonPressed();
         }
         private MyMasterDetailViewModel VM => App.Locator.MyMasterDetailVM;
         private MasterPageItem lastSelectedItem;
-
         void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var item = e.SelectedItem as MasterPageItem;
