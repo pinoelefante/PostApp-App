@@ -6,15 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace PostApp.Converters
+namespace PostApp.Behaviors
 {
-    public class NullBoolean : IValueConverter
+    public class ItemTappedEventArgsConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string && string.IsNullOrEmpty(value as string))
-                return false;
-            return value == null ? false : true;
+            var eventArgs = value as ItemTappedEventArgs;
+            if (eventArgs == null)
+                throw new ArgumentException("Expected TappedEventArgs as value", "value");
+
+            return eventArgs.Item;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

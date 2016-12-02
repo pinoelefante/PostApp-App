@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace PostApp.Api.Data
 {
-    public class News
+    public class News : INotifyPropertyChanged
     {
         public int id { get; set; }
         public string testo { get; set; }
@@ -18,7 +16,8 @@ namespace PostApp.Api.Data
         public string publisherNome { get; set; }
         public int publisherId { get; set; }
         public int letta { get; set; }
-        public int thankyou { get; set; }
+        private int _thankyou;
+        public int thankyou { get { return _thankyou; } set { Set(ref _thankyou, value); } }
         public string immagineThumb
         {
             get
@@ -41,8 +40,15 @@ namespace PostApp.Api.Data
         {
             get
             {
-                return testo.Substring(0, testo.Length / 2) + "...\n[Apri la news per continuare a leggere]";
+                return testo.Substring(0, testo.Length / 2) + "...";
             }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void Set<T>(ref T k, T v, [CallerMemberName]string property = "")
+        {
+            k = v;
+            if (!string.IsNullOrEmpty(property))
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
     }
 }

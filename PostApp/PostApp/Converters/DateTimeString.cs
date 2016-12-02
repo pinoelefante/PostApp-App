@@ -8,13 +8,12 @@ using Xamarin.Forms;
 
 namespace PostApp.Converters
 {
-    public class NullBoolean : IValueConverter
+    public class DateTimeString : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string && string.IsNullOrEmpty(value as string))
-                return false;
-            return value == null ? false : true;
+            var data = (DateTime)value;
+            return data.ToString("dd/MM/yyyy HH:mm:ss");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

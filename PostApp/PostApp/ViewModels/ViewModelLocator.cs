@@ -15,11 +15,11 @@ namespace PostApp.ViewModels
 {
     public class ViewModelLocator
     {
-        public const string MyMasterDetailPage = "MyMasterDetail";
         public const string FirstAccessPage = "FirstAccessPage";
         public const string RegistraEditorPage = "RegistraEditorPage";
         public const string RegistraScuolaPage = "RegistraScuolaPage";
         public const string MainPage = "MainPage";
+        public const string ViewNewsPage = "ViewNewsPage";
 
         private static NavigationService nav;
         static ViewModelLocator()
@@ -38,14 +38,15 @@ namespace PostApp.ViewModels
             SimpleIoc.Default.Register<MyMasterDetailViewModel>();
             SimpleIoc.Default.Register<RegistraEditorPageViewModel>();
             SimpleIoc.Default.Register<RegistraScuolaPageViewModel>();
+            SimpleIoc.Default.Register<ViewNewsPageViewModel>();
         }
         public void RegisterPages()
         {
-            nav.Configure(ViewModelLocator.MyMasterDetailPage, typeof(MyMasterDetail));
             nav.Configure(ViewModelLocator.FirstAccessPage, typeof(FirstAccessPage));
             nav.Configure(ViewModelLocator.MainPage, typeof(MainPage));
             nav.Configure(ViewModelLocator.RegistraEditorPage, typeof(RegistraEditorPage));
             nav.Configure(ViewModelLocator.RegistraScuolaPage, typeof(RegistraScuolaPage));
+            nav.Configure(ViewModelLocator.ViewNewsPage, typeof(ViewNewsPage));
         }
         public NavigationService NavigationService { get { return nav; } }
         /// <summary>
@@ -63,6 +64,7 @@ namespace PostApp.ViewModels
         public MyMasterDetailViewModel MyMasterDetailVM => ServiceLocator.Current.GetInstance<MyMasterDetailViewModel>();
         public RegistraEditorPageViewModel RegistraEditorPageVM => ServiceLocator.Current.GetInstance<RegistraEditorPageViewModel>();
         public RegistraScuolaPageViewModel RegistraScuolaPageVM => ServiceLocator.Current.GetInstance<RegistraScuolaPageViewModel>();
+        public ViewNewsPageViewModel ViewNewsPageVM => ServiceLocator.Current.GetInstance<ViewNewsPageViewModel>();
         
     }
 }

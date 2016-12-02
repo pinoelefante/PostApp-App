@@ -1,13 +1,16 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using PostApp.Api;
 using PostApp.Api.Data;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace PostApp.ViewModels
 {
@@ -40,5 +43,12 @@ namespace PostApp.ViewModels
                 IsBusyActive = false;
             }
         }
+        private RelayCommand<News> _apriNewsCmd;
+        public RelayCommand<News> ApriNews =>
+            _apriNewsCmd ??
+            (_apriNewsCmd = new RelayCommand<News>((x) =>
+            {
+                navigation.NavigateTo(ViewModelLocator.ViewNewsPage, x);
+            }));
     }
 }

@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PostApp.Views.ViewNewsPage"
+             xmlns:conv="clr-namespace:PostApp.Converters;assembly=PostApp"
+             Title="Visualizza news">
+
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <conv:ImagePathToUrlConverter x:Key="imgConverter"/>
+      <conv:IntBoolean x:Key="IntVisibility"/>
+      <conv:NotIntBoolean x:Key="NotIntVisibility"/>
+      <conv:DateTimeString x:Key="DateTimeConverter"/>
+      <conv:NullBoolean x:Key="NullBoolean"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  
+  <Grid Padding="16,16,16,0">
+    <Grid.RowDefinitions>
+      <RowDefinition />
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <ScrollView>
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/> <!-- titolo -->
+          <RowDefinition Height="Auto" /> <!-- immagine -->
+          <RowDefinition Height="Auto" /> <!-- pubblicato da/il -->
+          <RowDefinition /> <!-- Testo news-->
+          <RowDefinition Height="Auto" /> <!-- tasto statistiche -->
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Text="{Binding NewsSelezionata.titolo}" FontAttributes="Bold" FontSize="24" />
+        
+        <Grid HeightRequest="240" IsVisible="{Binding NewsSelezionata.immagine, Converter={StaticResource NullBoolean}}">
+          <Image Source="{Binding NewsSelezionata.immagineFull, Converter={StaticResource imgConverter}}" Aspect="AspectFit"/>
+        </Grid>
+        
+        <StackLayout Grid.Row="2">
+          <StackLayout Orientation="Horizontal">
+            <Label Text="da:" FontAttributes="Italic" FontSize="12"/>
+            <Label Text="{Binding NewsSelezionata.publisherNome}" FontSize="12"/>
+          </StackLayout>
+          <StackLayout Orientation="Horizontal">
+            <Label Text="il:" FontAttributes="Italic" FontSize="12"/>
+            <Label Text="{Binding NewsSelezionata.data, Converter={StaticResource DateTimeConverter}}" FontSize="12"/>
+          </StackLayout>
+        </StackLayout>
+
+        <Label Grid.Row="3" Text="{Binding NewsSelezionata.testo}" FontSize="16"/>
+
+        <Button Grid.Row="4" Text="Statistiche" IsVisible="False"/>
+      </Grid>
+    </ScrollView>
+
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+      <Button Grid.Column="0" HeightRequest="64" Text="{Binding NewsSelezionata.thankyou, Mode=OneWay}" Image="like.png" Command="{Binding ThankYouCommand}" BorderColor="Transparent" BackgroundColor="Transparent" BorderWidth="0"/>
+      <Button Grid.Column="1" Text="Condividi" Image="share.png" Command="{Binding Share}" BorderColor="Transparent" BackgroundColor="Transparent"/>
+      <Button Grid.Column="2" Text="Posizione" Image="location.png" BorderColor="Transparent" BackgroundColor="Transparent" IsVisible="{Binding NewsSelezionata.posizione, Converter={StaticResource NullBoolean}}"/>
+    </Grid>
+  </Grid>
+</ContentPage>

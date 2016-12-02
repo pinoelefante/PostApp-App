@@ -14,7 +14,12 @@ namespace PostApp.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if(value == null)
-                return $"{parameter.ToString()}_empty.jpg";
+            {
+                if (!string.IsNullOrEmpty(parameter as string))
+                    return $"{parameter.ToString()}_empty.jpg";
+                else
+                    return "";
+            }
             return $"{IMAGE_SERVER}/{value.ToString()}";
         }
 
