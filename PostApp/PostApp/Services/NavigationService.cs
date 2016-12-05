@@ -48,9 +48,6 @@ namespace PostApp.Services
         {
             lock (_pagesByKey)
             {
-                if (CurrentPageKey!=null && pageKey.CompareTo(CurrentPageKey) == 0) //vieta la navigazione sulla stessa pagina
-                    return;
-
                 if (_pagesByKey.ContainsKey(pageKey))
                 {
                     var type = _pagesByKey[pageKey];

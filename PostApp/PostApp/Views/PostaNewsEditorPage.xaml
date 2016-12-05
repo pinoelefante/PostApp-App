@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PostApp.Views.PostaNewsEditorPage"
+             Title="Pubblica notizia">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition />
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <ScrollView Margin="16,0,0,0" Padding="0,0,16,0">
+      <StackLayout>
+
+        <StackLayout>
+          <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
+            <Label Text="Titolo della news" TextColor="Gray"/>
+            <Label Text="(*)" TextColor="Red" />
+          </StackLayout>
+          <Entry HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding TitoloNews, Mode=TwoWay}" Placeholder="Titolo della news"/>
+        </StackLayout>
+
+        <StackLayout>
+          <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
+            <Label Text="Contenuto della news" TextColor="Gray"/>
+            <Label Text="(*)" TextColor="Red" />
+          </StackLayout>
+          <Editor HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding CorpoNews, Mode=TwoWay}"/>
+        </StackLayout>
+
+        <StackLayout>
+          <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
+            <Label Text="Pubblica per" TextColor="Gray"/>
+            <Label Text="(*)" TextColor="Red" />
+          </StackLayout>
+          <Picker x:Name="editorPicker" SelectedIndex="{Binding EditorSelezionato, Mode=TwoWay}"/>
+        </StackLayout>
+
+        <StackLayout>
+          <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
+            <Label Text="Posizione della news" TextColor="Gray"/>
+            <Label Text="(*)" TextColor="Red" />
+          </StackLayout>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Entry Grid.Column="0" HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding PosizioneNews, Mode=TwoWay}"/>
+            <Button Grid.Column="1" Image="currentPosition.png" BackgroundColor="Transparent" BorderColor="Transparent" BorderWidth="0" Command="{Binding LocationCommand}"/>
+          </Grid>
+        </StackLayout>
+
+      </StackLayout>
+    </ScrollView>
+
+    <Button Grid.Row="1" Text="Pubblica" FontSize="24" TextColor="White" BackgroundColor="Green" HorizontalOptions="FillAndExpand" Command="{Binding InviaPostCommand}" HeightRequest="60"/>
+  </Grid>
+</ContentPage>

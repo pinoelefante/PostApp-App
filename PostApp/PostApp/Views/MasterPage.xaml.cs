@@ -23,28 +23,30 @@ namespace PostApp.Views
                 Title = "Home",
                 //IconSource = "todo.png",
                 Command = ViewModelLocator.MainPage,
-                TargetType = typeof(FirstAccessPage)
             });
             masterPageItems.Add(new MasterPageItem
             {
                 Title = "First Access",
                 //IconSource = "todo.png",
                 Command = ViewModelLocator.FirstAccessPage,
-                TargetType = typeof(FirstAccessPage)
             });
 
             masterPageItems.Add(new MasterPageItem
             {
                 Title = "Registra Editor",
-                TargetType = typeof(RegistraEditorPage),
                 Command = ViewModelLocator.RegistraEditorPage
+            });
+
+            masterPageItems.Add(new MasterPageItem
+            {
+                Title = "Pubblica news editor",
+                Command = ViewModelLocator.PostaNewsEditorPage
             });
 
             masterPageItems.Add(new MasterPageItem
             {
                 Title = "Registra scuola",
                 //IconSource = "todo.png",
-                TargetType = typeof(RegistraScuolaPage),
                 Command = ViewModelLocator.RegistraScuolaPage
             });
 

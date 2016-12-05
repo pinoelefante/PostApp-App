@@ -109,6 +109,7 @@
     <None Include="Windows_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="currentPosition.png" />
     <Content Include="like.png" />
     <Content Include="location.png" />
     <Content Include="news_empty.jpg" />

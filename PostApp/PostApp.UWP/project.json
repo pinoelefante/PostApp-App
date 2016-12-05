@@ -6,6 +6,7 @@
     "Plugin.Share": "4.0.3",
     "sameerIOTApps.Plugin.SecureStorage": "1.2.1",
     "sqlite-net-pcl": "1.2.1",
+    "Xam.Plugin.Geolocator": "3.0.4",
     "Xam.Plugins.Notifier": "2.0.2",
     "Xamarin.Forms": "2.3.2.127"
   },

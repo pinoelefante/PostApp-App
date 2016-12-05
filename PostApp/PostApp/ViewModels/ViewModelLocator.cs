@@ -20,6 +20,7 @@ namespace PostApp.ViewModels
         public const string RegistraScuolaPage = "RegistraScuolaPage";
         public const string MainPage = "MainPage";
         public const string ViewNewsPage = "ViewNewsPage";
+        public const string PostaNewsEditorPage = "PostaNewsEditorPage";
 
         private static NavigationService nav;
         static ViewModelLocator()
@@ -32,10 +33,12 @@ namespace PostApp.ViewModels
             SimpleIoc.Default.Register<IPostAppApiService, PostAppAPI>();
             SimpleIoc.Default.Register<ToastNotificationService>();
             SimpleIoc.Default.Register<ValidationService>();
+            SimpleIoc.Default.Register<LocationService>();
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<FirstAccessPageViewModel>();
             SimpleIoc.Default.Register<MyMasterDetailViewModel>();
+            SimpleIoc.Default.Register<PostaNewsEditorPageViewModel>();
             SimpleIoc.Default.Register<RegistraEditorPageViewModel>();
             SimpleIoc.Default.Register<RegistraScuolaPageViewModel>();
             SimpleIoc.Default.Register<ViewNewsPageViewModel>();
@@ -44,27 +47,21 @@ namespace PostApp.ViewModels
         {
             nav.Configure(ViewModelLocator.FirstAccessPage, typeof(FirstAccessPage));
             nav.Configure(ViewModelLocator.MainPage, typeof(MainPage));
+            nav.Configure(ViewModelLocator.PostaNewsEditorPage, typeof(PostaNewsEditorPage));
             nav.Configure(ViewModelLocator.RegistraEditorPage, typeof(RegistraEditorPage));
             nav.Configure(ViewModelLocator.RegistraScuolaPage, typeof(RegistraScuolaPage));
             nav.Configure(ViewModelLocator.ViewNewsPage, typeof(ViewNewsPage));
         }
         public NavigationService NavigationService { get { return nav; } }
-        /// <summary>
-        /// Gets the Main property.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic",Justification = "This non-static member is needed for data binding purposes.")]
-        public MainViewModel MainPageViewModel
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<MainViewModel>();
-            }
-        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "This non-static member is needed for data binding purposes.")]
+        public MainViewModel MainPageViewModel => ServiceLocator.Current.GetInstance<MainViewModel>();
         public FirstAccessPageViewModel FirstAccessVM => ServiceLocator.Current.GetInstance<FirstAccessPageViewModel>();
         public MyMasterDetailViewModel MyMasterDetailVM => ServiceLocator.Current.GetInstance<MyMasterDetailViewModel>();
         public RegistraEditorPageViewModel RegistraEditorPageVM => ServiceLocator.Current.GetInstance<RegistraEditorPageViewModel>();
         public RegistraScuolaPageViewModel RegistraScuolaPageVM => ServiceLocator.Current.GetInstance<RegistraScuolaPageViewModel>();
         public ViewNewsPageViewModel ViewNewsPageVM => ServiceLocator.Current.GetInstance<ViewNewsPageViewModel>();
+        public PostaNewsEditorPageViewModel PostaNewsEditorPageVM => ServiceLocator.Current.GetInstance<PostaNewsEditorPageViewModel>();
         
     }
 }
