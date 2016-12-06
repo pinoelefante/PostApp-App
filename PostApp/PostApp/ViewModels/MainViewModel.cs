@@ -34,19 +34,40 @@ namespace PostApp.ViewModels
         public override async void NavigatedTo(object parameter = null)
         {
             if (!ElencoNews.Any())
+                GetNewsFrom();
+            else
+                GetNewsTo();
+        }
+        private async void GetNewsFrom()
+        {
+            IsBusyActive = true;
+            var envelop = await postApp.GetAllMyNewsFrom(editorLastId);
+            if (envelop.response == StatusCodes.OK)
             {
-                IsBusyActive = true;
-                var envelop = await postApp.GetAllMyNewsFrom(editorLastId);
-                if (envelop.response == StatusCodes.OK)
-                {
-                    foreach (var item in envelop.content)
-                        ElencoNews.Add(item);
-                    if (ElencoNews.Any())
-                        editorLastId = ElencoNews.Last().id;
-                    RaisePropertyChanged(() => ElencoNews);
-                }
-                IsBusyActive = false;
+                foreach (var item in envelop.content)
+                    ElencoNews.Add(item);
+                if (ElencoNews.Any())
+                    editorLastId = ElencoNews.Last().id;
+                RaisePropertyChanged(() => ElencoNews);
             }
+            IsBusyActive = false;
+        }
+        private async void GetNewsTo()
+        {
+            IsBusyActive = true;
+            int id = ElencoNews.First().id;
+            var envelop = await postApp.GetAllMyNewsTo(id);
+            if(envelop.response == StatusCodes.OK)
+            {
+                for (int i = envelop.content.Count - 1; i >= 0; i--)
+                    ElencoNews.Insert(0, envelop.content[i]);
+                RaisePropertyChanged(() => ElencoNews);
+            }
+            else
+            {
+                Debug.WriteLine("Errore: " + envelop.response);
+            }
+            IsBusyActive = false;
         }
         private RelayCommand<News> _apriNewsCmd;
         public RelayCommand<News> ApriNews =>
