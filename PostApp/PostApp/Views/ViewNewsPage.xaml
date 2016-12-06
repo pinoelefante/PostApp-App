@@ -65,7 +65,7 @@
       </Grid.RowDefinitions>
       <Button Grid.Row="0" Grid.Column="0" HeightRequest="64" Text="{Binding NewsSelezionata.thankyou, Mode=OneWay}" Image="like.png" Command="{Binding ThankYouCommand}" BorderColor="Transparent" BackgroundColor="Transparent" BorderWidth="0"/>
       <Button Grid.Row="0" Grid.Column="1" Text="Condividi" Image="share.png" Command="{Binding Share}" BorderColor="Transparent" BackgroundColor="Transparent"/>
-      <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="Center" Text="Posizione" Image="location.png" BorderColor="Transparent" BackgroundColor="Transparent" IsVisible="{Binding NewsSelezionata.posizione, Converter={StaticResource NullBoolean}}"/>
+      <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="Center" VerticalOptions="FillAndExpand" Text="Posizione" Image="location.png" Command="{Binding LocationCommand}" BorderColor="Transparent" BackgroundColor="Transparent" IsVisible="{Binding NewsSelezionata.posizione, Converter={StaticResource NullBoolean}}"/>
     </Grid>
   </Grid>
 </ContentPage>

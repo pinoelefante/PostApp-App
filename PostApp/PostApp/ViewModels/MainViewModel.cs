@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using PostApp.Api;
 using PostApp.Api.Data;
+using PostApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,10 +19,14 @@ namespace PostApp.ViewModels
     {
         private IPostAppApiService postApp;
         private INavigationService navigation;
-        public MainViewModel(IPostAppApiService _api, INavigationService _nav)
+        private UserNotificationService notification;
+        private IClosingApp closeApp;
+        public MainViewModel(IPostAppApiService _api, INavigationService _nav, UserNotificationService _not, IClosingApp _ca)
         {
             postApp = _api;
             navigation = _nav;
+            notification = _not;
+            closeApp = _ca;
         }
         public ObservableCollection<News> ElencoNews { get; } = new ObservableCollection<News>();
         private int? editorLastId = null;
@@ -50,5 +55,16 @@ namespace PostApp.ViewModels
             {
                 navigation.NavigateTo(ViewModelLocator.ViewNewsPage, x);
             }));
+        public void AskClose()
+        {
+            notification.ConfirmDialog("Conferma chiusura", "Sei sicuro di voler chiudere l'applicazione?", (confirmValue) =>
+            {
+                if (confirmValue)
+                {
+                    //throw new NullReferenceException("Non è una eccezione. Solo per chiudere l'app");
+                    closeApp.CloseApp();
+                }
+            });
+        }
     }
 }

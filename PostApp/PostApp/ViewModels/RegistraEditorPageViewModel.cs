@@ -16,10 +16,10 @@ namespace PostApp.ViewModels
     {
         private IPostAppApiService postApp;
         private INavigationService navigation;
-        private ToastNotificationService toast;
+        private UserNotificationService toast;
         private ValidationService validation;
         public Dictionary<string, string> Categorie { get; set; }
-        public RegistraEditorPageViewModel(IPostAppApiService api, INavigationService nav, ToastNotificationService _t, ValidationService _validation)
+        public RegistraEditorPageViewModel(IPostAppApiService api, INavigationService nav, UserNotificationService _t, ValidationService _validation)
         {
             postApp = api;
             navigation = nav;
@@ -29,7 +29,7 @@ namespace PostApp.ViewModels
             ElencoCitta = postApp.GetListaComuni();
         }
         private bool _regButtonEnable, _nomeEnabled = true;
-        private int _categoriaIndex = 0;
+        private int _categoriaIndex = -1;
         private Comune _cittaSelezionata;
         private string _nome = string.Empty, _indirizzo = string.Empty, _email = string.Empty, _telefono = string.Empty;
         public ObservableCollection<Comune> ElencoCitta { get; private set; }
@@ -80,12 +80,12 @@ namespace PostApp.ViewModels
                     var envelop = await postApp.RegistraEditor(NomeEditor, Categorie[Categorie.Keys.ElementAt(_categoriaIndex)], IndirizzoEmail, Telefono, IndirizzoEditor, CittaSelezionata.istat);
                     if(envelop.response == StatusCodes.OK)
                     {
-                        toast.Notify("Registrazione editor", "La registrazione è avvenuta con successo ed è in attesa di approvazione");
+                        toast.ShowMessageDialog("Registrazione editor", "La registrazione è avvenuta con successo ed è in attesa di approvazione");
                         navigation.NavigateTo(ViewModelLocator.MainPage);
                     }
                     else
                     {
-                        toast.Notify("Registrazione editor", $"Errore {envelop.response}\nSi è verificato un errore durante la registrazione dell'editor. Riprova più tardi o contatta l'assistenza");
+                        toast.ShowMessageDialog("Registrazione editor", $"Errore {envelop.response}\nSi è verificato un errore durante la registrazione dell'editor. Riprova più tardi o contatta l'assistenza");
                         Debug.WriteLine($"Errore {envelop.response}");
                     }
                 }
@@ -94,35 +94,35 @@ namespace PostApp.ViewModels
         {
             if (this.CategoriaIndexSelected < 0)
             {   if(notifyOn)
-                    toast.Notify("Registrazione editor", "Devi selezionare una categoria");
+                    toast.ShowMessageDialog("Registrazione editor", "Devi selezionare una categoria");
                 IsRegisterButtonEnable = false;
                 return false;
             }
             if (this.CittaSelezionata == null)
             {
                 if (notifyOn)
-                    toast.Notify("Registrazione editor", "Devi selezionare la città dell'editor");
+                    toast.ShowMessageDialog("Registrazione editor", "Devi selezionare la città dell'editor");
                 IsRegisterButtonEnable = false;
                 return false;
             }
             if (string.IsNullOrEmpty(this.IndirizzoEditor.Trim()))
             {
                 if (notifyOn)
-                    toast.Notify("Registrazione editor", "Devi inserire l'indirizzo dell'editor");
+                    toast.ShowMessageDialog("Registrazione editor", "Devi inserire l'indirizzo dell'editor");
                 IsRegisterButtonEnable = false;
                 return true;
             }
             if (!validation.EmailValidation(IndirizzoEmail))
             {
                 if (notifyOn)
-                    toast.Notify("Registrazione editor", "Devi inserire un indirizzo email valido");
+                    toast.ShowMessageDialog("Registrazione editor", "Devi inserire un indirizzo email valido");
                 IsRegisterButtonEnable = false;
                 return false;
             }
             if (string.IsNullOrEmpty(Telefono.Trim()))
             {
                 if (notifyOn)
-                    toast.Notify("Registrazione editor", "Devi inserire un numero di telefono");
+                    toast.ShowMessageDialog("Registrazione editor", "Devi inserire un numero di telefono");
                 IsRegisterButtonEnable = false;
                 return false;
             }

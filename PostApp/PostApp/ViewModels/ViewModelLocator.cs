@@ -31,9 +31,11 @@ namespace PostApp.ViewModels
             var dbService = DependencyService.Get<ISQLite>();
             SimpleIoc.Default.Register<ISQLite>(() => dbService);
             SimpleIoc.Default.Register<IPostAppApiService, PostAppAPI>();
-            SimpleIoc.Default.Register<ToastNotificationService>();
+            SimpleIoc.Default.Register<UserNotificationService>();
             SimpleIoc.Default.Register<ValidationService>();
             SimpleIoc.Default.Register<LocationService>();
+            var killApp = DependencyService.Get<IClosingApp>();
+            SimpleIoc.Default.Register<IClosingApp>(() => killApp);
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<FirstAccessPageViewModel>();

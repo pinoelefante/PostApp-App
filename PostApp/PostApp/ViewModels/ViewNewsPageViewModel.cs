@@ -2,6 +2,7 @@
 using Plugin.Share;
 using PostApp.Api;
 using PostApp.Api.Data;
+using PostApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,9 +15,11 @@ namespace PostApp.ViewModels
     public class ViewNewsPageViewModel : MyViewModel
     {
         private IPostAppApiService postApp;
-        public ViewNewsPageViewModel(IPostAppApiService _api)
+        private LocationService location;
+        public ViewNewsPageViewModel(IPostAppApiService _api, LocationService _loc)
         {
             postApp = _api;
+            location = _loc;
         }
         public override void NavigatedTo(object parameter = null)
         {
@@ -74,6 +77,7 @@ namespace PostApp.ViewModels
                     }
                     else
                     {
+                        Debug.WriteLine("Errore: "+envelop.response);
                         //errore di connessione
                     }
                 }
@@ -83,6 +87,23 @@ namespace PostApp.ViewModels
             (_shareCmd = new RelayCommand(async () =>
             {
                 await CrossShare.Current.ShareLink("https://www.facebook.com", NewsSelezionata.testoAnteprima, NewsSelezionata.titolo);
+            }));
+        public RelayCommand LocationCommand =>
+            _positionCmd ??
+            (_positionCmd = new RelayCommand(async () =>
+            {
+                var pos = NewsSelezionata.posizione.Split(new char[] { ';' });
+                var latitude = Double.Parse(pos[0]);
+                var longitude = Double.Parse(pos[1]);
+                var res = await location.NavigateTo(latitude, longitude, NewsSelezionata.titolo);
+                if (res)
+                {
+                    Debug.WriteLine("Maps OK");
+                }
+                else
+                {
+                    Debug.WriteLine("Maps error");
+                }
             }));
     }
 }

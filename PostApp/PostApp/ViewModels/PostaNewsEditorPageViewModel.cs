@@ -5,6 +5,7 @@ using PostApp.Api.Data;
 using PostApp.Services;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,11 +17,13 @@ namespace PostApp.ViewModels
         private IPostAppApiService postApp;
         private INavigationService navigation;
         private LocationService location;
-        public PostaNewsEditorPageViewModel(IPostAppApiService api, INavigationService nav, LocationService _loc)
+        private UserNotificationService notification;
+        public PostaNewsEditorPageViewModel(IPostAppApiService api, INavigationService nav, LocationService _loc, UserNotificationService _not)
         {
             postApp = api;
             navigation = nav;
             location = _loc;
+            notification = _not;
         }
         public override void NavigatedTo(object parameter = null)
         {
@@ -51,40 +54,55 @@ namespace PostApp.ViewModels
             _locationCmd ??
             (_locationCmd = new RelayCommand(async () =>
             {
-                var pos = await location.GetLocation();
-                if(pos!=null)
+                if (location.IsLocationEnabled)
                 {
-                    PosizioneNews = $"{pos.Latitude.ToString("N6")};{pos.Longitude.ToString("N6")}";
+                    var pos = await location.GetLocation();
+                    if (pos != null)
+                        PosizioneNews = $"{pos.Latitude.ToString("N6")};{pos.Longitude.ToString("N6")}";
+                    else
+                        notification.ShowMessageDialog("Posizione", "Errore nella rilevazione della posizione");
                 }
                 else
                 {
-                    //TODO show error
+                    notification.ShowMessageDialog("Posizione", "Abilitare la rilevazione della posizione");
                 }
             }));
         public RelayCommand InviaPostCommand =>
             _inviaNewsCmd ??
             (_inviaNewsCmd = new RelayCommand(async () =>
             {
-                if (VerificaCampi())
+                if (VerificaCampi(true))
                 {
-                    var res = await postApp.PostEditor(ListaEditor[EditorSelezionato].id, TitoloNews, CorpoNews, Immagine, PosizioneNews);
+                    var res = await postApp.PostEditor(ListaEditor[EditorSelezionato].id, TitoloNews, CorpoNews, Immagine, PosizioneNews.Trim());
                     if(res.response == StatusCodes.OK)
                     {
-
+                        notification.ShowMessageDialog("Invio notizia", "Notizia inviata con successo");
                         navigation.NavigateTo(ViewModelLocator.MainPage);
                     }
                     else
-                    {
-
-                    }
-                }
-                else
-                {
-
+                        notification.ShowMessageDialog("Invio notizia", $"Errore durante l'invio della notizia.\nStatusCode: {res.response}");
                 }
             }));
-        private bool VerificaCampi()
+        private bool VerificaCampi(bool notify = false)
         {
+            if (EditorSelezionato < 0)
+            {
+                if (notify)
+                    notification.ShowMessageDialog("Verifica dati", "Seleziona l'editor con cui pubblicare la notizia");
+                return false;
+            }
+            if (string.IsNullOrEmpty(TitoloNews) || string.IsNullOrEmpty(TitoloNews.Trim()))
+            {
+                if (notify)
+                    notification.ShowMessageDialog("Verifica dati", "Inserire un titolo");
+                return false;
+            }
+            if (string.IsNullOrEmpty(CorpoNews) || string.IsNullOrEmpty(CorpoNews.Trim()))
+            {
+                if (notify)
+                    notification.ShowMessageDialog("Verifica dati", "Il messaggio della notizia non può essere vuoto");
+                return false;
+            }
             return true;
         }
     }

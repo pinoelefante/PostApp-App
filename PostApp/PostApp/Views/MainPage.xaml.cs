@@ -24,5 +24,11 @@ namespace PostApp.Views
             base.OnAppearing();
             VM.NavigatedTo();
         }
+        protected override bool OnBackButtonPressed()
+        {
+            VM.AskClose();
+            return true;
+            //throw new Exception("Not a real exception: just close app");
+        }
     }
 }

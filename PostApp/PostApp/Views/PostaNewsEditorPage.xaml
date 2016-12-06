@@ -25,7 +25,9 @@
             <Label Text="Contenuto della news" TextColor="Gray"/>
             <Label Text="(*)" TextColor="Red" />
           </StackLayout>
-          <Editor HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding CorpoNews, Mode=TwoWay}"/>
+          <ScrollView>
+            <Editor HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding CorpoNews, Mode=TwoWay}" HeightRequest="250"/>
+          </ScrollView>
         </StackLayout>
 
         <StackLayout>

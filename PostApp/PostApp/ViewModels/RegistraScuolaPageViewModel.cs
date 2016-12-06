@@ -17,10 +17,10 @@ namespace PostApp.ViewModels
     {
         private INavigationService navigation;
         private IPostAppApiService postApp;
-        private ToastNotificationService toast;
+        private UserNotificationService toast;
         private ValidationService validation;
         
-        public RegistraScuolaPageViewModel(IPostAppApiService _postApp, INavigationService navigationService, ToastNotificationService _toast, ValidationService _val)
+        public RegistraScuolaPageViewModel(IPostAppApiService _postApp, INavigationService navigationService, UserNotificationService _toast, ValidationService _val)
         {
             navigation = navigationService;
             postApp = _postApp;
@@ -70,68 +70,85 @@ namespace PostApp.ViewModels
             {
                 Debug.WriteLine($"{CognomeDirigente} {NomeDirigente}\n{NomeScuola}\n{CittaSelezionata?.comune}\n{IndirizzoEmail}\n{Telefono}\n{UsernameDirigente}\n{PasswordDirigente}");
                 VerificaDati();
-                if (IsRegisterButtonEnable)
+                if (VerificaDati(true))
                 {
                     IsBusyActive = true;
                     var envelop = await postApp.RegistraScuola(NomeScuola, CittaSelezionata.istat, IndirizzoEmail, Telefono, IndirizzoScuola, CognomeDirigente, NomeDirigente, UsernameDirigente, PasswordDirigente);
                     IsBusyActive = false;
                     if(envelop.response == StatusCodes.OK)
                     {
-                        toast.Notify("Registrazione scuola", "La registrazione è avvenuta con successo ed è in attesa di approvazione");
+                        toast.ShowMessageDialog("Registrazione scuola", "La registrazione è avvenuta con successo ed è in attesa di approvazione");
                         navigation.NavigateTo(ViewModelLocator.MainPage);
                     }
                     else
                     {
-                        toast.Notify("Registrazione scuola", $"Errore {envelop.response}\nSi è verificato un errore durante la registrazione della scuola. Riprova più tardi o contatta l'assistenza");
+                        toast.ShowMessageDialog("Registrazione scuola", $"Errore {envelop.response}\nSi è verificato un errore durante la registrazione della scuola.\nRiprova più tardi o contatta l'assistenza");
                         Debug.WriteLine($"Errore {envelop.response}");
                     }
                 }
             }));
         private bool _canRegister;
         public bool IsRegisterButtonEnable { get { return _canRegister; } set { Set(ref _canRegister, value); } }
-        private void VerificaDati()
+        private bool VerificaDati(bool notify = false)
         {
             if (string.IsNullOrEmpty(NomeDirigente.Trim()))
             {
+                if(notify)
+                    toast.ShowMessageDialog("Registrazione scuola", "Inserisci il nome del dirigente scolastico");
                 IsRegisterButtonEnable = false;
-                return;
+                return false;
             }
             if (string.IsNullOrEmpty(CognomeDirigente.Trim()))
             {
+                if (notify)
+                    toast.ShowMessageDialog("Registrazione scuola", "Inserisci il cognome del dirigente scolastico");
                 IsRegisterButtonEnable = false;
-                return;
-            }
-            if (string.IsNullOrEmpty(NomeScuola.Trim()))
-            {
-                IsRegisterButtonEnable = false;
-                return;
-            }
-            if (CittaSelezionata == null)
-            {
-                IsRegisterButtonEnable = false;
-                return;
-            }
-            if (string.IsNullOrEmpty(IndirizzoEmail.Trim()))
-            {
-                IsRegisterButtonEnable = false;
-                return;
-            }
-            if (string.IsNullOrEmpty(Telefono.Trim()))
-            {
-                IsRegisterButtonEnable = false;
-                return;
+                return false;
             }
             if (string.IsNullOrEmpty(UsernameDirigente.Trim()))
             {
+                if (notify)
+                    toast.ShowMessageDialog("Registrazione scuola", "Inserisci la username del dirigente scolastico");
                 IsRegisterButtonEnable = false;
-                return;
+                return false;
             }
             if (string.IsNullOrEmpty(PasswordDirigente.Trim()))
             {
+                if (notify)
+                    toast.ShowMessageDialog("Registrazione scuola", "Inserisci la password del dirigente scolastico");
                 IsRegisterButtonEnable = false;
-                return;
+                return false;
+            }
+            if (string.IsNullOrEmpty(NomeScuola.Trim()))
+            {
+                if (notify)
+                    toast.ShowMessageDialog("Registrazione scuola", "Inserisci il nome della scuola");
+                IsRegisterButtonEnable = false;
+                return false;
+            }
+            if (CittaSelezionata == null)
+            {
+                if (notify)
+                    toast.ShowMessageDialog("Registrazione scuola", "Inserisci la città della scuola");
+                IsRegisterButtonEnable = false;
+                return false;
+            }
+            if (string.IsNullOrEmpty(IndirizzoEmail.Trim()))
+            {
+                if (notify)
+                    toast.ShowMessageDialog("Registrazione scuola", "Inserisci l'indirizzo email della scuola");
+                IsRegisterButtonEnable = false;
+                return false;
+            }
+            if (string.IsNullOrEmpty(Telefono.Trim()))
+            {
+                if (notify)
+                    toast.ShowMessageDialog("Registrazione scuola", "Inserisci il numero di telefono della scuola");
+                IsRegisterButtonEnable = false;
+                return false;
             }
             IsRegisterButtonEnable = true;
+            return true;
         }
     }
 }

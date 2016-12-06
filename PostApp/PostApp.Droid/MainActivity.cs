@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using Plugin.SecureStorage;
+using Acr.UserDialogs;
 
 namespace PostApp.Droid
 {
@@ -21,6 +22,7 @@ namespace PostApp.Droid
             base.OnCreate(bundle);
 
             SecureStorageImplementation.StoragePassword = "kEW]xVU9ASQh";
+            UserDialogs.Init(this);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());

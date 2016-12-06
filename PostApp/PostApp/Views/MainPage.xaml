@@ -23,13 +23,14 @@
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
+    <!--
     <Label Text="Non ci sono news da visualizzare :(" 
            Grid.Row="0"
            TextColor="Black"
            HorizontalOptions="Center" 
            VerticalOptions="Center" 
            IsVisible="{Binding Path=ElencoNews.Count, Converter={StaticResource NotIntVisibility}}"/>
-    
+    -->
     <ListView Grid.Row="0" 
               ItemsSource="{Binding ElencoNews}" 
               IsVisible="{Binding Path=ElencoNews.Count, Converter={StaticResource IntVisibility}}" 
