@@ -54,7 +54,7 @@ namespace PostApp.ViewModels
                 var pos = await location.GetLocation();
                 if(pos!=null)
                 {
-                    PosizioneNews = $"{pos.Latitude};{pos.Longitude}";
+                    PosizioneNews = $"{pos.Latitude.ToString("N6")};{pos.Longitude.ToString("N6")}";
                 }
                 else
                 {
@@ -71,6 +71,7 @@ namespace PostApp.ViewModels
                     if(res.response == StatusCodes.OK)
                     {
 
+                        navigation.NavigateTo(ViewModelLocator.MainPage);
                     }
                     else
                     {
