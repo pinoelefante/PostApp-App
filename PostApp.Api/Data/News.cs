@@ -40,7 +40,10 @@ namespace PostApp.Api.Data
         {
             get
             {
-                return testo.Substring(0, testo.Length / 2) + "...";
+                if (testo.Length < 100)
+                    return testo.Substring(0, testo.Length - testo.Length / 8) + "...";
+                else 
+                    return testo.Substring(0, 100) + "...";
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;
