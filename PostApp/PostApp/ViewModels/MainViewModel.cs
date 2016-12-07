@@ -31,7 +31,7 @@ namespace PostApp.ViewModels
         public ObservableCollection<News> ElencoNews { get; } = new ObservableCollection<News>();
         private int? editorLastId = null;
 
-        public override async void NavigatedTo(object parameter = null)
+        public override void NavigatedTo(object parameter = null)
         {
             if (!ElencoNews.Any())
                 GetNewsFrom();
@@ -81,11 +81,15 @@ namespace PostApp.ViewModels
             notification.ConfirmDialog("Conferma chiusura", "Sei sicuro di voler chiudere l'applicazione?", (confirmValue) =>
             {
                 if (confirmValue)
-                {
-                    //throw new NullReferenceException("Non è una eccezione. Solo per chiudere l'app");
                     closeApp.CloseApp();
-                }
             });
         }
+        private RelayCommand _loadMoreNewsCmd;
+        public RelayCommand CaricaAltreNewsCommand =>
+            _loadMoreNewsCmd ??
+            (_loadMoreNewsCmd = new RelayCommand(() =>
+            {
+                GetNewsFrom();
+            }));
     }
 }

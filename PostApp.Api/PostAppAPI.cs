@@ -230,7 +230,6 @@ namespace PostApp.Api
             {
                 new KeyValuePair<string, string>("idNews",idNews.ToString())
             });
-            //return await sendRequest<News>($"{SERVER_ADDRESS}/editor.php?action=LeggiNews", content);
             return await sendRequestWithAction<News, Dictionary<string, string>>($"{SERVER_ADDRESS}/editor.php?action=LeggiNews", (x) =>
             {
                 if(x!=null && x.Any())
@@ -430,6 +429,31 @@ namespace PostApp.Api
                 }
                 return null;
             }, content);
+        }
+        public async Task<Envelop<List<Editor>>> CercaEditor(string query)
+        {
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("query",query)
+            });
+            return await sendRequestWithAction<List<Editor>, List<Dictionary<string,string>>>($"{SERVER_ADDRESS}/editor.php?action=CercaEditor", (x)=> 
+            {
+                if(x!=null && x.Any())
+                {
+                    List<Editor> editors = new List<Editor>(x.Count);
+                    foreach (var item in x)
+                    {
+                        Editor e = new Editor()
+                        {
+                            id = Int32.Parse(item["id"]),
+                            nome = item["nome"]
+                        };
+                        editors.Add(e);
+                    }
+                    return editors;
+                }
+                return new List<Editor>(1);
+            },content);
         }
         #endregion
 

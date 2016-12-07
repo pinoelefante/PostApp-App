@@ -17,6 +17,7 @@ namespace PostApp.Views
         {
             InitializeComponent();
             this.BindingContext = App.Locator.MainPageViewModel;
+            loadMoreButton.Clicked += (s, e) => VM.CaricaAltreNewsCommand.Execute(null);
         }
         private MainViewModel VM => this.BindingContext as MainViewModel;
         protected override void OnAppearing()

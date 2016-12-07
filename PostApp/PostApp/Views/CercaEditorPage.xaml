@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PostApp.Views.CercaEditorPage"
+             xmlns:b="clr-namespace:PostApp.Behaviors;assembly=PostApp"
+             Title="Cerca editor">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <b:ItemTappedEventArgsConverter x:Key="ItemTappedConverter"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition/>
+    </Grid.RowDefinitions>
+
+    <SearchBar Grid.Row="0" Placeholder="Nome dell'editor da cercare" SearchCommand="{Binding CercaCommand}" Text="{Binding SearchText, Mode=TwoWay}" Margin="20"/>
+    <ListView Margin="20,0" RowHeight="30" Grid.Row="1" ItemsSource="{Binding RisultatiRicerca, Mode=OneWay}">
+      <ListView.Behaviors>
+        <b:EventToCommandBehavior EventName="ItemTapped" Command="{Binding ApriEditor}" EventArgsConverter="{StaticResource ItemTappedConverter}" />
+      </ListView.Behaviors>
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ViewCell>
+            <ViewCell.View>
+              <Label Text="{Binding nome}" FontSize="16" />
+            </ViewCell.View>
+          </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+  </Grid>
+</ContentPage>

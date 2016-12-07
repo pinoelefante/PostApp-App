@@ -56,6 +56,7 @@
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\UserNotificationService.cs" />
     <Compile Include="Services\ValidationService.cs" />
+    <Compile Include="ViewModels\CercaEditorPageViewModel.cs" />
     <Compile Include="ViewModels\FirstAccessPageViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\MyMasterDetailViewModel.cs" />
@@ -66,6 +67,9 @@
     <Compile Include="ViewModels\ViewEditorPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="ViewModels\ViewNewsPageViewModel.cs" />
+    <Compile Include="Views\CercaEditorPage.xaml.cs">
+      <DependentUpon>CercaEditorPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\FirstAccessPage.xaml.cs">
       <DependentUpon>FirstAccessPage.xaml</DependentUpon>
     </Compile>
@@ -258,6 +262,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\ViewEditorPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\CercaEditorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

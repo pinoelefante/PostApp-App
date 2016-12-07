@@ -79,6 +79,9 @@
           </ViewCell>
         </DataTemplate>
       </ListView.ItemTemplate>
+      <ListView.Footer>
+        <Button Text="Carica altre news" HorizontalOptions="FillAndExpand" BorderRadius="10" x:Name="loadMoreButton"/>
+      </ListView.Footer>
     </ListView>
     
   </Grid>

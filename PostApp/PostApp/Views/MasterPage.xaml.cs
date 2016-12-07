@@ -24,11 +24,18 @@ namespace PostApp.Views
                 //IconSource = "todo.png",
                 Command = ViewModelLocator.MainPage,
             });
+            
             masterPageItems.Add(new MasterPageItem
             {
                 Title = "First Access",
                 //IconSource = "todo.png",
                 Command = ViewModelLocator.FirstAccessPage,
+            });
+            masterPageItems.Add(new MasterPageItem
+            {
+                Title = "Cerca editor",
+                //IconSource = "todo.png",
+                Command = ViewModelLocator.CercaEditorPage,
             });
 
             masterPageItems.Add(new MasterPageItem
