@@ -33,11 +33,12 @@ namespace PostApp.Api
         Task<Envelop<List<News>>> GetNotificationsEditor(DateTime from);
         Task<Envelop<string>> ThanksForNewsEditor(int idNews);
         Task<Envelop<News>> LeggiNewsEditor(int idNews);
-        Task<Envelop<List<News>>> GetNewsEditor(int idEditor);
+        Task<Envelop<List<News>>> GetNewsEditor(int idEditor, int? lastId);
         Task<Envelop<List<Editor>>> GetEditorsByLocation(string location);
         Task<Envelop<List<Comune>>> GetComuniConEditors();
         Task<Envelop<List<News>>> GetAllMyNewsFrom(int? fromId);
         Task<Envelop<List<News>>> GetAllMyNewsTo(int to);
+        Task<Envelop<Editor>> GetEditorInfo(int idEditor);
 
         //scuola.php
         Task<Envelop<string>> RegistraScuola(string nomeScuola, string localitaScuola, string emailScuola, string telScuola, string indirizzoScuola, string cognomePreside, string nomePreside, string usernamePreside, string passwordPreside);

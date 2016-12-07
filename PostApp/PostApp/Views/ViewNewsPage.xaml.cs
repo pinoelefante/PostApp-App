@@ -24,6 +24,16 @@ namespace PostApp.Views
         {
             base.OnAppearing();
             VM.NavigatedTo(newsSelezionata);
+
+            if (publisherNameLabel.GestureRecognizers.Count == 0)
+            {
+                var publisherNameTapped = new TapGestureRecognizer();
+                publisherNameTapped.Tapped += (s, e) =>
+                {
+                    VM.ApriPaginaEditor();
+                };
+                publisherNameLabel.GestureRecognizers.Add(publisherNameTapped);
+            }
         }
     }
 }

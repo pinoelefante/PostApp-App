@@ -40,7 +40,7 @@
         <StackLayout Grid.Row="2">
           <StackLayout Orientation="Horizontal">
             <Label Text="da:" FontAttributes="Italic" FontSize="12"/>
-            <Label Text="{Binding NewsSelezionata.publisherNome}" FontSize="12"/>
+            <Label Text="{Binding NewsSelezionata.publisherNome}" FontSize="12" x:Name="publisherNameLabel"/>
           </StackLayout>
           <StackLayout Orientation="Horizontal">
             <Label Text="il:" FontAttributes="Italic" FontSize="12"/>

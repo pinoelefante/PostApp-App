@@ -45,6 +45,7 @@
     <Compile Include="Converters\DateTimeString.cs" />
     <Compile Include="Converters\ImagePathToUrlConverter.cs" />
     <Compile Include="Converters\IntBoolean.cs" />
+    <Compile Include="Converters\NotBoolean.cs" />
     <Compile Include="Converters\NotIntBoolean.cs" />
     <Compile Include="Converters\NullBoolean.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="ViewModels\PostaNewsEditorPageViewModel.cs" />
     <Compile Include="ViewModels\RegistraEditorPageViewModel.cs" />
     <Compile Include="ViewModels\RegistraScuolaPageViewModel.cs" />
+    <Compile Include="ViewModels\ViewEditorPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="ViewModels\ViewNewsPageViewModel.cs" />
     <Compile Include="Views\FirstAccessPage.xaml.cs">
@@ -84,6 +86,9 @@
     </Compile>
     <Compile Include="Views\RegistraScuolaPage.xaml.cs">
       <DependentUpon>RegistraScuolaPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ViewEditorPage.xaml.cs">
+      <DependentUpon>ViewEditorPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ViewNewsPage.xaml.cs">
       <DependentUpon>ViewNewsPage.xaml</DependentUpon>
@@ -247,6 +252,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\PostaNewsEditorPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\ViewEditorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

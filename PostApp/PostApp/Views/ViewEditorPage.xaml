@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PostApp.Views.ViewEditorPage"
+             xmlns:conv="clr-namespace:PostApp.Converters;assembly=PostApp"
+             xmlns:b="clr-namespace:PostApp.Behaviors;assembly=PostApp"
+             Title="Visualizza editor"
+             x:Name="page">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <conv:ImagePathToUrlConverter x:Key="imgConverter"/>
+      <conv:IntBoolean x:Key="IntVisibility"/>
+      <conv:NotIntBoolean x:Key="NotIntVisibility"/>
+      <conv:NotBoolean x:Key="NotBoolean" />
+      <conv:DateTimeString x:Key="DateTimeConverter"/>
+      <b:ItemTappedEventArgsConverter x:Key="ItemTappedConverter"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition />
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <Grid Grid.Row="0" VisualElement.HeightRequest="100" BackgroundColor="Accent">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <Image Grid.Column="0"
+             Source="{Binding Editor.immagine, Converter={StaticResource imgConverter}, ConverterParameter='writer'}"
+             Aspect="AspectFit"
+             VisualElement.WidthRequest="80"
+             VisualElement.HeightRequest="80"
+             Margin="10"/>
+      <Grid Grid.Column="1" Padding="10,0,10,0">
+        <Grid.RowDefinitions>
+          <RowDefinition />
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Text="{Binding Editor.nome}" HorizontalOptions="Center" VerticalOptions="End" FontSize="18"/>
+        <StackLayout Grid.Row="1" Orientation="Horizontal" HorizontalOptions="End">
+          <Button Text="{Binding Editor.followers}" Image="not_following.png" Command="{Binding FollowCommand}" IsVisible="{Binding Editor.following, Converter={StaticResource NotBoolean}}" VisualElement.WidthRequest="80" BorderRadius="10" BackgroundColor="White" BorderWidth="1"/>
+          <Button Text="{Binding Editor.followers}" Image="following.png" Command="{Binding UnfollowCommand}" IsVisible="{Binding Editor.following}" VisualElement.WidthRequest="80" BorderRadius="10" BorderWidth="1" BackgroundColor="White"/>
+        </StackLayout>
+      </Grid>
+    </Grid>
+
+    <ListView Grid.Row="1" RowHeight="120" ItemsSource="{Binding ElencoNews}">
+      <ListView.Behaviors>
+        <b:EventToCommandBehavior EventName="ItemTapped" Command="{Binding ApriNews}" EventArgsConverter="{StaticResource ItemTappedConverter}" />
+      </ListView.Behaviors>
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ViewCell>
+            <ViewCell.View>
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Image Source="{Binding immagine, Converter={StaticResource imgConverter}, ConverterParameter='news'}"
+                       Aspect="AspectFit"
+                       Grid.Column="0"
+                       Grid.Row="0"
+                       Grid.RowSpan="3"
+                       VerticalOptions="Center"
+                       Margin="8"/>
+                <Label Text="{Binding titolo}" FontAttributes="Bold" FontSize="20" Grid.Column="1" Grid.Row="0" LineBreakMode="NoWrap"/>
+                <Label Text="{Binding testoAnteprima}" TextColor="Gray" Grid.Column="1" Grid.Row="1"  LineBreakMode="TailTruncation"/>
+                <Label Text="[Continua...]" TextColor="Gray" Grid.Column="1" Grid.Row="2"  LineBreakMode="TailTruncation"/>
+                <StackLayout Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Margin="8,0,0,0" Orientation="Horizontal">
+                  <Label TextColor="Gray" FontSize="12" Text="il" FontAttributes="Italic" />
+                  <Label TextColor="Gray" FontSize="12" Text="{Binding data, Converter={StaticResource DateTimeConverter}}" LineBreakMode="NoWrap"/>
+                </StackLayout>
+              </Grid>
+            </ViewCell.View>
+          </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+      <ListView.Footer>
+        <Button Text="Carica altre" BorderRadius="5" HorizontalOptions="FillAndExpand" x:Name="loadMoreButton"/>
+      </ListView.Footer>
+    </ListView>
+  </Grid>
+</ContentPage>

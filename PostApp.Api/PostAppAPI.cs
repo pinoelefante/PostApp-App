@@ -254,13 +254,15 @@ namespace PostApp.Api
                 return null;
             }, content);
         }
-        public async Task<Envelop<List<News>>> GetNewsEditor(int idEditor)
+        public async Task<Envelop<List<News>>> GetNewsEditor(int idEditor, int? lastId)
         {
-            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            var parameters = new List<KeyValuePair<string, string>>()
             {
                 new KeyValuePair<string, string>("idEditor",idEditor.ToString())
-            });
-            //return await sendRequest<List<News>>($"{SERVER_ADDRESS}/editor.php?action=GetNewsEditor", content);
+            };
+            if (lastId != null)
+                parameters.Add(new KeyValuePair<string, string>("from", lastId.ToString()));
+            FormUrlEncodedContent content = new FormUrlEncodedContent(parameters);
             return await sendRequestWithAction<List<News>, List<Dictionary<string, string>>>($"{SERVER_ADDRESS}/editor.php?action=GetNewsEditor", (x)=>
             {
                 if(x!=null && x.Any())
@@ -275,7 +277,7 @@ namespace PostApp.Api
                             id = Int32.Parse(item["newsId"]),
                             titolo = item["titolo"],
                             immagine = item["immagine"],
-                            //testo = item["corpo"],
+                            testo = item["corpo"],
                             data = DateTime.Parse(item["data"], CultureInfo.InvariantCulture),
                             posizione = item["posizione"],
                             tipoNews = NewsType.EDITOR_NEWS
@@ -403,6 +405,32 @@ namespace PostApp.Api
                 return new List<News>(1);
             }, content);
         }
+        public async Task<Envelop<Editor>> GetEditorInfo(int idEditor)
+        {
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idEditor",idEditor.ToString())
+            });
+            return await sendRequestWithAction<Editor, Dictionary<string, string>>($"{SERVER_ADDRESS}/editor.php?action=GetEditorInfo", (x) =>
+            {
+                if (x != null && x.Any())
+                {
+                    Editor editor = new Editor()
+                    {
+                        descrizione = x["descrizione"],
+                        followers = Int32.Parse(x["followers"]),
+                        following = Int32.Parse(x["following"]) == 0 ? false : true,
+                        geo_coordinate = x["coordinate"],
+                        id = Int32.Parse(x["id"]),
+                        immagine = x["immagine"],
+                        localita = x["localita"],
+                        nome = x["nome"]
+                    };
+                    return editor;
+                }
+                return null;
+            }, content);
+        }
         #endregion
 
         #region scuola.php
@@ -485,7 +513,6 @@ namespace PostApp.Api
                 else
                 {
                     Debug.WriteLine("Errore accesso");
-                    
                 }
             }
             Envelop<T> envelop = new Envelop<T>();

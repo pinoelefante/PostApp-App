@@ -28,7 +28,6 @@ namespace PostApp.Views
         {
             VM.AskClose();
             return true;
-            //throw new Exception("Not a real exception: just close app");
         }
     }
 }

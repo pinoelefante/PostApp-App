@@ -8,7 +8,7 @@ namespace PostApp.Api.Data
 {
     public class Editor
     {
-        public virtual string nome { get; set; }
+        public string nome { get; set; }
         public int id { get; set; }
         public string categoria { get; set; }
         public string email { get; set; }
@@ -19,5 +19,7 @@ namespace PostApp.Api.Data
         public string descrizione { get; set; }
         public string immagine { get; set; }
         public string ruolo { get; set; }
+        public int followers { get; set; }
+        public bool following { get; set; }
     }
 }

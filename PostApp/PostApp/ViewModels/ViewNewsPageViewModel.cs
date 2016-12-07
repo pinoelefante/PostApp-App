@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Views;
 using Plugin.Share;
 using PostApp.Api;
 using PostApp.Api.Data;
@@ -16,10 +17,12 @@ namespace PostApp.ViewModels
     {
         private IPostAppApiService postApp;
         private LocationService location;
-        public ViewNewsPageViewModel(IPostAppApiService _api, LocationService _loc)
+        private INavigationService navigation;
+        public ViewNewsPageViewModel(IPostAppApiService _api, LocationService _loc, INavigationService _nav)
         {
             postApp = _api;
             location = _loc;
+            navigation = _nav;
         }
         public override void NavigatedTo(object parameter = null)
         {
@@ -105,5 +108,9 @@ namespace PostApp.ViewModels
                     Debug.WriteLine("Maps error");
                 }
             }));
+        public void ApriPaginaEditor()
+        {
+            navigation.NavigateTo(ViewModelLocator.ViewEditorPage, NewsSelezionata.publisherId);
+        }
     }
 }

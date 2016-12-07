@@ -104,11 +104,14 @@
     <Content Include="Assets\StoreLogo.scale-240.png" />
     <Content Include="Assets\WideLogo.scale-240.png" />
     <Content Include="currentPosition.png" />
+    <Content Include="following.png" />
     <Content Include="like.png" />
     <Content Include="location.png" />
     <Content Include="news_empty.jpg" />
+    <Content Include="not_following.png" />
     <Content Include="scuola_empty.jpg" />
     <Content Include="share.png" />
+    <Content Include="writer_empty.jpg" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
