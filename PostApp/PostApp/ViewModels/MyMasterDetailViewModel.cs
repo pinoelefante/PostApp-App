@@ -30,7 +30,7 @@ namespace PostApp.ViewModels
         {
             if (!NavigationConfigured)
             {
-                (_navigationService as NavigationService).Initialize(navPage);
+                (_navigationService as NavigationService).Initialize(navPage, ViewModelLocator.MainPage);
                 NavigationConfigured = true;
             }
         }

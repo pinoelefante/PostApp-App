@@ -95,7 +95,7 @@ namespace PostApp.ViewModels
         public bool LoadMoreVisibility { get { return _loadMoreVisibility; } set { Set(ref _loadMoreVisibility, value); } }
         public void RimuoviEditor(int idEditor)
         {
-            var found = ElencoNews.Where(x => x.publisherId == idEditor);
+            var found = ElencoNews.Where(x => x.publisherId == idEditor).ToList();
             foreach (var item in found)
                 ElencoNews.Remove(item);
         }

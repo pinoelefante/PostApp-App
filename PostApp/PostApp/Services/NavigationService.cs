@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Views;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -13,6 +14,7 @@ namespace PostApp.Services
     {
         private readonly Dictionary<string, Type> _pagesByKey = new Dictionary<string, Type>();
         private NavigationPage _navigation;
+        private string MainPageKey;
 
         public string CurrentPageKey
         {
@@ -87,9 +89,14 @@ namespace PostApp.Services
                         throw new InvalidOperationException(
                             "No suitable constructor found for page " + pageKey);
                     }
-
                     var page = constructor.Invoke(parameters) as Page;
-                    _navigation.PushAsync(page);
+                    var task = _navigation.PushAsync(page);
+                    task.ContinueWith((c) =>
+                    {
+                        if (MainPageKey != null && pageKey.CompareTo(MainPageKey) == 0)
+                            ClearBackstack();
+                        Debug.WriteLine("Backstack size: " + _navigation.Navigation.NavigationStack.Count);
+                    });
                 }
                 else
                 {
@@ -116,10 +123,20 @@ namespace PostApp.Services
                 }
             }
         }
-
-        public void Initialize(NavigationPage navigation)
+        public void ClearBackstack()
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                var stack = _navigation.Navigation.NavigationStack.ToList();
+                for (int i = 0; i < stack.Count-1; i++)
+                    _navigation.Navigation.RemovePage(stack[i]);
+            });
+        }
+        
+        public void Initialize(NavigationPage navigation, string mainPageKey)
         {
             _navigation = navigation;
+            MainPageKey = mainPageKey;
         }
     }
 }

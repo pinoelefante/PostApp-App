@@ -22,11 +22,9 @@ namespace PostApp
             }
             else
             {
-                firstPage = new NavigationPage(new FirstAccessPage());
-                Locator.NavigationService.Initialize((NavigationPage)firstPage);
+                firstPage = new FirstAccessPage();
+                //Locator.NavigationService.Initialize((NavigationPage)firstPage);
             }
-            //Locator.NavigationService.NavigateTo(ViewModelLocator.FirstPage);
-            
             MainPage = firstPage;
         }
         private static ViewModelLocator _locator;
