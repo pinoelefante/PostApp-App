@@ -189,7 +189,6 @@ namespace PostApp.Api
             {
                 new KeyValuePair<string, string>("from",from.ToString("yyyy-MM-dd HH:mm:ss"))
             });
-            //return await sendRequest<List<News>>($"{SERVER_ADDRESS}/editor.php?action=GetNotifications", content);
             return await sendRequestWithAction<List<News>, List<Dictionary<string, string>>>($"{SERVER_ADDRESS}/editor.php?action=GetNotifications", (x) =>
             {
                 if(x!=null && x.Any())
@@ -378,6 +377,41 @@ namespace PostApp.Api
                 new KeyValuePair<string, string>("to",id.ToString())
             });
             return await sendRequestWithAction<List<News>, List<Dictionary<string, string>>>($"{SERVER_ADDRESS}/editor.php?action=GetAllMyNewsTo", (x) =>
+            {
+                if (x != null && x.Any())
+                {
+                    List<News> news = new List<News>(x.Count);
+                    foreach (var item in x)
+                    {
+                        News n = new News()
+                        {
+                            publisherId = Int32.Parse(item["editorId"]),
+                            publisherNome = item["editorNome"],
+                            id = Int32.Parse(item["newsId"]),
+                            titolo = item["titolo"],
+                            immagine = item["immagine"],
+                            testo = item["corpo"],
+                            data = DateTime.Parse(item["data"], CultureInfo.InvariantCulture),
+                            posizione = item["posizione"],
+                            tipoNews = NewsType.EDITOR_NEWS,
+                            letta = Int32.Parse(item["letta"])
+                        };
+                        news.Add(n);
+                    }
+                    return news;
+                }
+                return new List<News>(1);
+            }, content);
+        }
+        public async Task<Envelop<List<News>>> GetEditorNewsFromTo(int idEditor,int from, int to)
+        {
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idEditor",idEditor.ToString()),
+                new KeyValuePair<string, string>("from",from.ToString()),
+                new KeyValuePair<string, string>("to",to.ToString())
+            });
+            return await sendRequestWithAction<List<News>, List<Dictionary<string, string>>>($"{SERVER_ADDRESS}/editor.php?action=GetEditorNewsFromTo", (x) =>
             {
                 if (x != null && x.Any())
                 {

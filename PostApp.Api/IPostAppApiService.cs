@@ -38,6 +38,7 @@ namespace PostApp.Api
         Task<Envelop<List<Comune>>> GetComuniConEditors();
         Task<Envelop<List<News>>> GetAllMyNewsFrom(int? fromId);
         Task<Envelop<List<News>>> GetAllMyNewsTo(int to);
+        Task<Envelop<List<News>>> GetEditorNewsFromTo(int idEditor, int from, int to);
         Task<Envelop<Editor>> GetEditorInfo(int idEditor);
         Task<Envelop<List<Editor>>> CercaEditor(string query);
 

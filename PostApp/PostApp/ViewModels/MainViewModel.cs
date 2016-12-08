@@ -91,5 +91,36 @@ namespace PostApp.ViewModels
             {
                 GetNewsFrom();
             }));
+        private bool _loadMoreVisibility = true;
+        public bool LoadMoreVisibility { get { return _loadMoreVisibility; } set { Set(ref _loadMoreVisibility, value); } }
+        public void RimuoviEditor(int idEditor)
+        {
+            var found = ElencoNews.Where(x => x.publisherId == idEditor);
+            foreach (var item in found)
+                ElencoNews.Remove(item);
+        }
+        public async void AggiungiEditor(int idEditor)
+        {
+            if (ElencoNews.Any())
+            {
+                var envelop = await postApp.GetEditorNewsFromTo(idEditor, ElencoNews.First().id, ElencoNews.Last().id);
+                if (envelop.response == StatusCodes.OK)
+                {
+                    int startFromIndex = 0;
+                    foreach (var item in envelop.content)
+                    {
+                        for(int i = startFromIndex; i < ElencoNews.Count; i++)
+                        {
+                            if (item.id > ElencoNews[i].id)
+                            {
+                                ElencoNews.Insert(i, item);
+                                startFromIndex = i + 1;
+                            }
+                        }
+                    }
+                }
+            }
+            LoadMoreVisibility = true;
+        }
     }
 }

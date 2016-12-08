@@ -75,6 +75,7 @@ namespace PostApp.ViewModels
                     {
                         Editor.followers++;
                         Editor.following = true;
+                        App.Locator.MainPageViewModel.AggiungiEditor(CurrentEditorId);
                         Xamarin.Forms.Device.BeginInvokeOnMainThread(() => RaisePropertyChanged(() => Editor));
                     }
                 }
@@ -90,6 +91,7 @@ namespace PostApp.ViewModels
                     {
                         Editor.followers--;
                         Editor.following = false;
+                        App.Locator.MainPageViewModel.RimuoviEditor(CurrentEditorId);
                         Xamarin.Forms.Device.BeginInvokeOnMainThread(() => RaisePropertyChanged(() => Editor));
                     }
                 }
