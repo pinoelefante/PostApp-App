@@ -23,9 +23,10 @@
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <!-- Elenco scuole da approvare -->
-        <StackLayout VisualElement.IsVisible="{Binding ElencoScuoleDaApprovare.Count, Converter={StaticResource IntVisibility}}">
+        <StackLayout Grid.Row="0" VisualElement.IsVisible="{Binding ElencoScuoleDaApprovare.Count, Converter={StaticResource IntVisibility}}">
           <StackLayout Orientation="Horizontal">
             <Label Text="Ci sono" TextColor="Gray"/>
             <Label Text="{Binding Path=ElencoScuoleDaApprovare.Count, Mode=OneWay}" TextColor="Gray"/>
@@ -53,10 +54,39 @@
             </ListView>
           </RelativeLayout>
         </StackLayout>
-        
+
+        <!-- Elenco scuole approvate -->
+        <StackLayout Grid.Row="1" VisualElement.IsVisible="{Binding ElencoScuoleApprovate.Count, Converter={StaticResource IntVisibility}}">
+          <StackLayout Orientation="Horizontal">
+            <Label Text="Ci sono" TextColor="Gray"/>
+            <Label Text="{Binding Path=ElencoScuoleApprovate.Count, Mode=OneWay}" TextColor="Gray"/>
+            <Label Text="scuole approvate" TextColor="Gray"/>
+          </StackLayout>
+
+          <RelativeLayout Grid.Row="0" HeightRequest="120">
+            <ListView Rotation="270" ItemsSource="{Binding ElencoScuoleApprovate}" RowHeight="120" SeparatorVisibility="None"
+                      RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=0.5, Constant=-60}"
+                      RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=-0.5, Constant=60}"
+                      RelativeLayout.WidthConstraint="{ConstraintExpression Type=Constant, Constant=120}"
+                      RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}">
+              <ListView.ItemTemplate>
+                <DataTemplate>
+                  <ViewCell>
+                    <ViewCell.View>
+                      <StackLayout Padding="1" Rotation="90" BackgroundColor="White">
+                        <Image Source="{Binding immagineThumb, Converter={StaticResource imgConverter}, ConverterParameter='scuola', Mode=OneWay}" HeightRequest="80" HorizontalOptions="Center" Aspect="AspectFit"/>
+                        <Label TextColor="Black" Text="{Binding nome, Mode=OneWay}" HorizontalOptions="Center" FontSize="14" LineBreakMode="NoWrap"/>
+                      </StackLayout>
+                    </ViewCell.View>
+                  </ViewCell>
+                </DataTemplate>
+              </ListView.ItemTemplate>
+            </ListView>
+          </RelativeLayout>
+        </StackLayout>
         
         <!-- registrazione scuola -->
-        <StackLayout Grid.Row="1" HorizontalOptions="FillAndExpand">
+        <StackLayout Grid.Row="2" HorizontalOptions="FillAndExpand">
           <Label Text="Dati del dirigente scolastico" Margin="0,16,0,0" HorizontalOptions="Center"/>
           <StackLayout>
             <StackLayout Orientation="Horizontal" Margin="0,16,0,0">

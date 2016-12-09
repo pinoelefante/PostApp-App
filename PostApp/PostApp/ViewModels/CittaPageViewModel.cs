@@ -46,17 +46,23 @@ namespace PostApp.ViewModels
             }
             IsBusyActive = false;
         }
-        public async void CaricaEditors(string istat)
+        public async void CaricaEditors(string istat, Action atEnd = null)
         {
             var keyFound = Editors.Keys.Where(x => x.istat.Equals(istat));
             if (!keyFound.Any())
+            {
+                atEnd?.Invoke();
                 return;
+            }
             ObservableCollection<Editor> editors = Editors[keyFound.ElementAt(0)];
             if (editors.Any())
+            {
+                atEnd?.Invoke();
                 return;
+            }
             IsBusyActive = true;
             var envelop = await postApp.GetEditorsByLocation(istat);
-            if(envelop.response == StatusCodes.OK)
+            if (envelop.response == StatusCodes.OK)
             {
                 var comuni = envelop.content.Where(x => x.categoria.Equals("Comune")).ToList();
                 if (comuni.Any()) //inserisce i comuni all'inizio della lista
@@ -75,6 +81,7 @@ namespace PostApp.ViewModels
                 notification.ShowMessageDialog("Errore", "Si è verificato un errore durante il caricamento degli editors del comune");
             }
             IsBusyActive = false;
+            atEnd?.Invoke();
         }
         public void ApriEditor(Editor editor)
         {

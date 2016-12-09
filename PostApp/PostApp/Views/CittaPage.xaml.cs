@@ -57,9 +57,9 @@ namespace PostApp.Views
                 };
                 dataSource.Add(source);
             }
-            accordion.AccordionButtonClicked = (objId) =>
+            accordion.AccordionButtonClicked = (objId, action) =>
             {
-                VM.CaricaEditors(objId.ToString());
+                VM.CaricaEditors(objId.ToString(), action);
             };
             accordion.DataSource = dataSource;
             accordion.DataBind();

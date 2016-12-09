@@ -36,14 +36,19 @@ namespace PostApp.ViewModels
             if(envelop.response == StatusCodes.OK)
                 foreach (var item in envelop.content)
                     ElencoScuoleDaApprovare.Add(item);
+
+            ElencoScuoleApprovate?.Clear();
+            var envelop2 = await postApp.GetMieScuoleWriter();
+            if (envelop2.response == StatusCodes.OK)
+                foreach (var item in envelop2.content)
+                    ElencoScuoleApprovate.Add(item);
         }
 
         private string _cognomeDirigente = string.Empty, _nomeDirigente = string.Empty, _nomeScuola = string.Empty, _indirizzoEmail = string.Empty, _indirizzoScuola = string.Empty, _telefono = string.Empty, _usernameDirigente = string.Empty, _passwordDirigente = string.Empty;
         private Comune _cittaSelezionata;
         private ObservableCollection<Comune> _elencoCitta;
-        private ObservableCollection<Scuola> _scuoleApprovare = new ObservableCollection<Scuola>();
-
-        public ObservableCollection<Scuola> ElencoScuoleDaApprovare { get { return _scuoleApprovare; } set { Set(ref _scuoleApprovare, value); } }
+        public ObservableCollection<Scuola> ElencoScuoleApprovate { get; } = new ObservableCollection<Scuola>();
+        public ObservableCollection<Scuola> ElencoScuoleDaApprovare { get; } = new ObservableCollection<Scuola>();
         public ObservableCollection<Comune> ElencoCitta { get { return _elencoCitta; } set { Set(ref _elencoCitta, value); } }
         public string CognomeDirigente { get { return _cognomeDirigente; } set { Set(ref _cognomeDirigente, value); VerificaDati(); } }
         public string NomeDirigente { get { return _nomeDirigente; } set { Set(ref _nomeDirigente, value); VerificaDati(); } }

@@ -510,7 +510,25 @@ namespace PostApp.Api
         }
         public async Task<Envelop<List<Scuola>>> GetMieScuoleWriter()
         {
-            return await sendRequest<List<Scuola>>($"{SERVER_ADDRESS}/scuola.php?action=GetMieScuoleWriter", null);
+            return await sendRequestWithAction<List<Scuola>, List<Dictionary<string, string>>>($"{SERVER_ADDRESS}/scuola.php?action=GetMieScuoleWriter", (x) =>
+            {
+                if (x != null && x.Any())
+                {
+                    List<Scuola> scuole = new List<Scuola>(x.Count);
+                    foreach (var item in x)
+                    {
+                        Scuola s = new Scuola()
+                        {
+                            id = Int32.Parse(item["scuolaId"]),
+                            nome = item["scuolaNome"],
+                            ruolo = item["userRuolo"]
+                        };
+                        scuole.Add(s);
+                    }
+                    return scuole;
+                }
+                return new List<Scuola>(1);
+            }, null, true);
         }
         public async Task<Envelop<List<Scuola>>> GetMieScuoleWriterDaApprovare()
         {

@@ -77,6 +77,13 @@ namespace PostApp.Controls
 
         void OnAccordionButtonClicked(object sender, EventArgs args)
         {
+            if (AccordionButtonClicked != null)
+                AccordionButtonClicked.Invoke((sender as AccordionButton).ContentId, () => AccordionButtonExpand(sender));
+            else
+                AccordionButtonExpand(sender);
+        }
+        private void AccordionButtonExpand(object sender)
+        {
             foreach (var vChildItem in mMainLayout.Children)
             {
                 if (vChildItem.GetType() == typeof(ContentView))
@@ -90,14 +97,12 @@ namespace PostApp.Controls
             var vSenderButton = (AccordionButton)sender;
 
             if (vSenderButton.Expand)
-            {
                 vSenderButton.Expand = false;
-            }
-            else vSenderButton.Expand = true;
+            else
+                vSenderButton.Expand = true;
             vSenderButton.AssosiatedContent.IsVisible = vSenderButton.Expand;
-            AccordionButtonClicked?.Invoke(vSenderButton.ContentId);
         }
-        public Action<object> AccordionButtonClicked { get; set; }
+        public Action<object, Action> AccordionButtonClicked { get; set; }
     }
     public class AccordionSource
     {
