@@ -18,12 +18,21 @@ namespace PostApp.Views
             InitializeComponent();
             this.BindingContext = App.Locator.MainPageViewModel;
             loadMoreButton.Clicked += (s, e) => VM.CaricaAltreNewsCommand.Execute(null);
+            VM.PropertyChanged += VM_PropertyChanged;
         }
+
+        private void VM_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals(nameof(VM.LoadMoreVisibility)))
+                loadMoreButton.IsVisible = VM.LoadMoreVisibility;
+        }
+
         private MainViewModel VM => this.BindingContext as MainViewModel;
         protected override void OnAppearing()
         {
             base.OnAppearing();
             VM.NavigatedTo();
+            loadMoreButton.IsVisible = VM.LoadMoreVisibility;
         }
         protected override bool OnBackButtonPressed()
         {

@@ -17,6 +17,13 @@ namespace PostApp.Views
             this.BindingContext = App.Locator.ViewEditorPageVM;
             CurrentEditorId = idEditor;
             loadMoreButton.Clicked += (s, e) => VM.LoadMoreNewsCommand.Execute(null);
+            VM.PropertyChanged += VM_PropertyChanged;
+        }
+
+        private void VM_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals(nameof(VM.LoadMoreVisibility)))
+                loadMoreButton.IsVisible = VM.LoadMoreVisibility;
         }
 
         private ViewEditorPageViewModel VM => this.BindingContext as ViewEditorPageViewModel;
@@ -25,6 +32,7 @@ namespace PostApp.Views
         {
             base.OnAppearing();
             VM.CurrentEditorId = CurrentEditorId;
+            loadMoreButton.IsVisible = VM.LoadMoreVisibility;
         }
     }
 }

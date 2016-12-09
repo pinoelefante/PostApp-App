@@ -38,7 +38,18 @@ namespace PostApp.Services
 
         public void GoBack()
         {
-            _navigation.PopAsync();
+            var taskNav = _navigation.PopAsync();
+            taskNav.ContinueWith((task) =>
+            {
+                Page page = task.Result;
+                if(MainPageKey !=null)
+                {
+                    Type mainPageType = _pagesByKey[MainPageKey];
+                    Type currPageType = page.GetType();
+                    if (mainPageType == currPageType)
+                        ClearBackstack();
+                }
+            });
         }
 
         public void NavigateTo(string pageKey)
@@ -95,7 +106,7 @@ namespace PostApp.Services
                     {
                         if (MainPageKey != null && pageKey.CompareTo(MainPageKey) == 0)
                             ClearBackstack();
-                        Debug.WriteLine("Backstack size: " + _navigation.Navigation.NavigationStack.Count);
+                        //Debug.WriteLine("Backstack size: " + _navigation.Navigation.NavigationStack.Count);
                     });
                 }
                 else

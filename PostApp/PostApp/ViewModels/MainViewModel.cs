@@ -17,6 +17,7 @@ namespace PostApp.ViewModels
 {
     public class MainViewModel : MyViewModel
     {
+        private static readonly int POST_PER_REQUEST = 10;
         private IPostAppApiService postApp;
         private INavigationService navigation;
         private UserNotificationService notification;
@@ -48,6 +49,8 @@ namespace PostApp.ViewModels
                     ElencoNews.Add(item);
                 if (ElencoNews.Any())
                     editorLastId = ElencoNews.Last().id;
+                if (!envelop.content.Any() || editorLastId == 1 || envelop.content.Count < POST_PER_REQUEST)
+                    LoadMoreVisibility = false;
                 RaisePropertyChanged(() => ElencoNews);
             }
             IsBusyActive = false;
@@ -105,22 +108,24 @@ namespace PostApp.ViewModels
             {
                 var envelop = await postApp.GetEditorNewsFromTo(idEditor, ElencoNews.First().id, ElencoNews.Last().id);
                 if (envelop.response == StatusCodes.OK)
+                    AggiungiNewsAFeed(envelop.content);
+            }
+            LoadMoreVisibility = true;
+        }
+        private void AggiungiNewsAFeed(List<News> el_news)
+        {
+            int startFromIndex = 0;
+            foreach (var item in el_news)
+            {
+                for (int i = startFromIndex; i < ElencoNews.Count; i++)
                 {
-                    int startFromIndex = 0;
-                    foreach (var item in envelop.content)
+                    if (item.id > ElencoNews[i].id)
                     {
-                        for(int i = startFromIndex; i < ElencoNews.Count; i++)
-                        {
-                            if (item.id > ElencoNews[i].id)
-                            {
-                                ElencoNews.Insert(i, item);
-                                startFromIndex = i + 1;
-                            }
-                        }
+                        ElencoNews.Insert(i, item);
+                        startFromIndex = i + 1;
                     }
                 }
             }
-            LoadMoreVisibility = true;
         }
     }
 }

@@ -6,6 +6,7 @@ using PostApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +36,7 @@ namespace PostApp.ViewModels
                 {
                     ElencoNews?.Clear();
                     lastNewsId = null;
+                    LoadMoreVisibility = true;
                     LoadEditor();
                 }
             }
@@ -102,6 +104,8 @@ namespace PostApp.ViewModels
             {
                 LoadNews();
             }));
+        private bool _loadMoreVisibility = true;
+        public bool LoadMoreVisibility { get { return _loadMoreVisibility; } set { Set(ref _loadMoreVisibility, value); } }
         public ObservableCollection<News> ElencoNews { get; } = new ObservableCollection<News>();
         private int? lastNewsId;
         private async void LoadNews()
@@ -114,10 +118,14 @@ namespace PostApp.ViewModels
                     lastNewsId = envelop.content.Last().id;
                 foreach (var item in envelop.content)
                     ElencoNews.Add(item);
+                if (!envelop.content.Any() || envelop.content.Count < POST_PER_REQUEST || lastNewsId == 1)
+                    LoadMoreVisibility = false;
             }
             IsBusyActive = false;
         }
         private RelayCommand<News> _apriNewsCmd;
+        private static readonly int POST_PER_REQUEST = 10;
+
         public RelayCommand<News> ApriNews =>
             _apriNewsCmd ??
             (_apriNewsCmd = new RelayCommand<News>((x) => 

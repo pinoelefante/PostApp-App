@@ -46,15 +46,22 @@ namespace PostApp.Views
 
             masterPageItems.Add(new MasterPageItem
             {
+                Title = "Registra scuola",
+                //IconSource = "todo.png",
+                Command = ViewModelLocator.RegistraScuolaPage
+            });
+
+            masterPageItems.Add(new MasterPageItem
+            {
                 Title = "Pubblica news editor",
                 Command = ViewModelLocator.PostaNewsEditorPage
             });
 
             masterPageItems.Add(new MasterPageItem
             {
-                Title = "Registra scuola",
+                Title = "Elenco città",
                 //IconSource = "todo.png",
-                Command = ViewModelLocator.RegistraScuolaPage
+                Command = ViewModelLocator.CittaPage
             });
 
             listView.ItemsSource = masterPageItems;
