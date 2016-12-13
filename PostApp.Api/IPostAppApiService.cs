@@ -19,6 +19,7 @@ namespace PostApp.Api
         Task<Envelop<string>> RequestAccessCode();
         Task<Envelop<string>> Access(string accessCode);
         Task<Envelop<string>> RegisterAccessCode(string accessCode, string loc, string email = null);
+        Task<Envelop<string>> RegistraPush(string token, PushDevice device);
 
         //editor.php
         Task<Envelop<string>> RegistraEditor(string nome, string categoria, string email, string telefono, string indirizzo, string localita);

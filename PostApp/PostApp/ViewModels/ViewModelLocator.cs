@@ -4,6 +4,7 @@ using Microsoft.Practices.ServiceLocation;
 using PostApp.Api;
 using PostApp.Services;
 using PostApp.Views;
+using PushNotification.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,7 @@ namespace PostApp.ViewModels
             SimpleIoc.Default.Register<LocationService>();
             var killApp = DependencyService.Get<IClosingApp>();
             SimpleIoc.Default.Register<IClosingApp>(() => killApp);
+            SimpleIoc.Default.Register<CrossPushNotificationListener>();
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<FirstAccessPageViewModel>();

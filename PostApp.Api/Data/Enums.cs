@@ -56,4 +56,11 @@ namespace PostApp.Api.Data
 
         NEWS_COMMON_TIPO_NEWS_INVALIDO = 80,
     }
+    public enum PushDevice
+    {
+        NOT_SET = 0,
+        ANDROID = 1,
+        IOS = 2,
+        WINDOWS_UWP = 3
+    }
 }

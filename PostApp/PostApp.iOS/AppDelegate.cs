@@ -4,6 +4,8 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
+using PushNotification.Plugin;
+using PostApp.Services;
 
 namespace PostApp.iOS
 {
@@ -22,12 +24,14 @@ namespace PostApp.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            global::Xamarin.Forms.Forms.Init();
-            LoadApplication(new App());
-
+            CrossPushNotification.Initialize<CrossPushNotificationListener>();
+            
             //per notifiche toast
             var settings = UIUserNotificationSettings.GetSettingsForTypes(UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound, new NSSet());
             UIApplication.SharedApplication.RegisterUserNotificationSettings(settings);
+
+            global::Xamarin.Forms.Forms.Init();
+            LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
         }

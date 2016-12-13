@@ -17,14 +17,9 @@ namespace PostApp
             Locator.RegisterPages();
             Page firstPage = null;
             if (Plugin.SecureStorage.CrossSecureStorage.Current.HasKey("AccessCode"))
-            {
                 firstPage = new MyMasterDetail();
-            }
             else
-            {
                 firstPage = new FirstAccessPage();
-                //Locator.NavigationService.Initialize((NavigationPage)firstPage);
-            }
             MainPage = firstPage;
         }
         private static ViewModelLocator _locator;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PostApp.Services;
+using PushNotification.Plugin;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,6 +33,7 @@ namespace PostApp.UWP
             this.InitializeComponent();
             this.Suspending += OnSuspending;
             Plugin.SecureStorage.WinSecureStorageBase.StoragePassword = "kEW]xVU9ASQh";
+            CrossPushNotification.Initialize<CrossPushNotificationListener>();
         }
 
         /// <summary>

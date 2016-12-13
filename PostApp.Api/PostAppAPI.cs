@@ -55,6 +55,15 @@ namespace PostApp.Api
             Envelop<string> response = await sendRequest<string>($"{SERVER_ADDRESS}/authentication.php?action=RegisterAccessCode", postContent, false);
             return response;
         }
+        public async Task<Envelop<string>> RegistraPush(string token, PushDevice device)
+        {
+            FormUrlEncodedContent postContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("token",token),
+                new KeyValuePair<string, string>("deviceOS", ((int)device).ToString())
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/authentication.php?action=RegistraPush");
+        }
         #endregion
 
         #region editor.php

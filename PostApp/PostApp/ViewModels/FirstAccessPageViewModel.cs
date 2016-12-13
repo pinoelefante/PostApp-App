@@ -4,6 +4,7 @@ using Plugin.SecureStorage;
 using PostApp.Api;
 using PostApp.Api.Data;
 using PostApp.Views;
+using PushNotification.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -56,13 +57,11 @@ namespace PostApp.ViewModels
                 Set(ref _selectedItem, value);
             }
         }
-        public Command<Comune> CellSelectedCommand
-        {
-            get
-            {
-                return _cellSelectedCommand ?? (_cellSelectedCommand = new Command<Comune>(parameter => { SelectedItem = parameter; AccediEnabled = true; } ));
-            }
-        }
+        public Command<Comune> CellSelectedCommand =>
+            _cellSelectedCommand ?? 
+            (_cellSelectedCommand = new Command<Comune>(parameter => { SelectedItem = parameter; AccediEnabled = true; } ));
+            
+        
         public Command AccessCommand =>
             _accessCommand ??
             (_accessCommand = new Command(async () =>
@@ -95,6 +94,7 @@ namespace PostApp.ViewModels
                     {
                         CrossSecureStorage.Current.SetValue("AccessCode", RequestedAccessCode.content);
                         postApp.SetAccessCode(RequestedAccessCode.content);
+                        CrossPushNotification.Current.Register();
                         App.Current.MainPage = new MyMasterDetail();
                     }
                     AccediEnabled = true;
