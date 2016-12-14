@@ -65,6 +65,7 @@ namespace PostApp.ViewModels
             nav.Configure(ViewModelLocator.ViewEditorPage, typeof(ViewEditorPage));
             nav.Configure(ViewModelLocator.ViewNewsPage, typeof(ViewNewsPage));
         }
+        public T GetService<T>() => ServiceLocator.Current.GetInstance<T>();
         public NavigationService NavigationService { get { return nav; } }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "This non-static member is needed for data binding purposes.")]

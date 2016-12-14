@@ -62,7 +62,7 @@ namespace PostApp.Api
                 new KeyValuePair<string, string>("token",token),
                 new KeyValuePair<string, string>("deviceOS", ((int)device).ToString())
             });
-            return await sendRequest<string>($"{SERVER_ADDRESS}/authentication.php?action=RegistraPush");
+            return await sendRequest<string>($"{SERVER_ADDRESS}/authentication.php?action=RegistraPush", postContent);
         }
         #endregion
 
@@ -612,6 +612,7 @@ namespace PostApp.Api
                     
                     envelop.time = DateTime.Parse(result["time"], CultureInfo.InvariantCulture);
                     envelop.response = (StatusCodes)Enum.ToObject(typeof(StatusCodes), Int32.Parse(result["response"]));
+                    Debug.WriteLine("STAUS CODE: " + envelop.response);
                     if (typeof(T) == typeof(string))
                         envelop.content = (T)(object)result["content"];
                     else
