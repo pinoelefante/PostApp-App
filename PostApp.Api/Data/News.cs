@@ -18,6 +18,7 @@ namespace PostApp.Api.Data
         public int letta { get; set; }
         private int _thankyou;
         public int thankyou { get { return _thankyou; } set { Set(ref _thankyou, value); } }
+        public int letturaConfermata { get; set; }
         public string immagineThumb
         {
             get

@@ -8,7 +8,7 @@ namespace PostApp.Api.Data
 {
     public class Envelop<T>
     {
-        public StatusCodes response { get; set; }
+        public StatusCodes response { get; set; } = StatusCodes.ENVELOP_UNSET;
         public DateTime time { get; set; }
         public T content { get; set; }
     }

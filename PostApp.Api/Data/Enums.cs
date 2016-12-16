@@ -22,6 +22,8 @@ namespace PostApp.Api.Data
     {
         ERRORE_SERVER = -500, //errore presente solo sul client
         ERRORE_CONNESSIONE = -501, //errore presente solo sul client
+        
+        ENVELOP_UNSET = 0,
 
         FAIL = -1,
         RICHIESTA_MALFORMATA = -2,
@@ -40,9 +42,9 @@ namespace PostApp.Api.Data
         EDITOR_ERRORE_CREAZIONE = 51,
         EDITOR_UTENTE_NON_AUTORIZZATO = 52,
         EDITOR_SEGUI_GIA = 53,
-        EDITOR_NEWS_GIA_RINGRAZIATO = 54,
+        NEWS_GIA_RINGRAZIATO = 54,
         EDITOR_NEWS_NON_TROVATA = 55,
-        EDITOR_NEWS_GIA_LETTA = 56,
+        NEWS_GIA_LETTA = 56,
         EDITOR_NON_SEGUITO = 57,
 
         SCUOLA_IMPOSSIBILE_ASSEGNARE_PRESIDE = 60,

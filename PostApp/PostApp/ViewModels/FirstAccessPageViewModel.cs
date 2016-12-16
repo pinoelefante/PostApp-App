@@ -93,7 +93,7 @@ namespace PostApp.ViewModels
                     else
                     {
                         CrossSecureStorage.Current.SetValue("AccessCode", RequestedAccessCode.content);
-                        postApp.SetAccessCode(RequestedAccessCode.content);
+                        postApp.AccessCode = RequestedAccessCode.content;
                         CrossPushNotification.Current.Register();
                         App.Current.MainPage = new MyMasterDetail();
                     }

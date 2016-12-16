@@ -13,13 +13,18 @@ namespace PostApp.Api
         //generici
         ObservableCollection<Comune> GetListaComuni();
         Dictionary<string, string> GetListaCategorie();
-        void SetAccessCode(string code);
+        Dictionary<string, string> GetListaGradiScuola();
+        Action OnAccessCodeError { get; set; }
+        string AccessCode { get; set; }
 
         //authentication.php
         Task<Envelop<string>> RequestAccessCode();
-        Task<Envelop<string>> Access(string accessCode);
         Task<Envelop<string>> RegisterAccessCode(string accessCode, string loc, string email = null);
+        Task<Envelop<string>> Access(string accessCode);
+        Task<Envelop<string>> CambiaLocalita(string localita);
+        //"Ripristina utente"
         Task<Envelop<string>> RegistraPush(string token, PushDevice device);
+        Task<Envelop<string>> UnRegistraPush(string token, PushDevice device);
 
         //editor.php
         Task<Envelop<string>> RegistraEditor(string nome, string categoria, string email, string telefono, string indirizzo, string localita);
@@ -35,6 +40,7 @@ namespace PostApp.Api
         Task<Envelop<string>> ThanksForNewsEditor(int idNews);
         Task<Envelop<News>> LeggiNewsEditor(int idNews);
         Task<Envelop<List<News>>> GetNewsEditor(int idEditor, int? lastId);
+        Task<Envelop<List<News>>> GetNewsFromAllEditors(int idFrom);
         Task<Envelop<List<Editor>>> GetEditorsByLocation(string location);
         Task<Envelop<List<Comune>>> GetComuniConEditors();
         Task<Envelop<List<News>>> GetAllMyNewsFrom(int? fromId);
@@ -50,6 +56,28 @@ namespace PostApp.Api
         Task<Envelop<List<Scuola>>> GetMieScuoleReader();
         Task<Envelop<string>> VerificaAccessoScuola(int idScuola);
         Task<Envelop<string>> AccessoScuola(string username, string password);
-
+        Task<Envelop<string>> AggiungiPlesso(int idScuola,string nomePlesso);
+        Task<Envelop<string>> RimuoviPlesso(int idScuola,int idPlesso);
+        Task<Envelop<string>> AggiungiSezione(int idScuola, int idPlesso, int idGrado, int classeInizio, int classeFine, string letteraSezione);
+        Task<Envelop<string>> RimuoviSezione(int idScuola, int idPlesso, int idGrado, string letteraSezione);
+        Task<Envelop<string>> AggiungiGrado(int idScuola, string gradoNome);
+        Task<Envelop<string>> RimuoviGrado(int idScuola, int idGrado);
+        Task<Envelop<string>> AggiungiClasse(int idScuola, int idPlesso, int idGrado, int classe, string letteraSezione);
+        Task<Envelop<string>> RimuoviClasse(int idScuola, int idPlesso, int idGrado, int classe, string letteraSezione);
+        Task<Envelop<string>> SbloccaCodiceScuola(string codice);
+        //"PostaNewsScuola"
+        //"PostaNewsClasse"
+        //"GetNewsScuola"
+        //"GetNewsClassi"
+        Task<Envelop<List<News>>> GetNewsMyScuole();
+        Task<Envelop<List<News>>> GetNewsMyClassi();
+        //"GetNotificheScuola"
+        //"GetNotificheClassi"
+        Task<Envelop<string>> ThankYouNewsScuola(int idNews);
+        Task<Envelop<string>> ThankYouNewsClasse(int idNews);
+        Task<Envelop<News>> LeggiNewsScuola(int idNews);
+        Task<Envelop<string>> NotificaLetturaScuola(int idNews);
+        Task<Envelop<News>> LeggiNewsClasse(int idNews);
+        Task<Envelop<string>> NotificaLetturaClasse(int idNews);
     }
 }

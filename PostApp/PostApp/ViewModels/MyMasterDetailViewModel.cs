@@ -24,7 +24,7 @@ namespace PostApp.ViewModels
             _navigationService = navigationService;
             postApp = pa;
             NavigateCommand = new RelayCommand<string>(Navigate);
-            pa.SetAccessCode(CrossSecureStorage.Current.GetValue("AccessCode"));
+            pa.AccessCode = CrossSecureStorage.Current.GetValue("AccessCode");
         }
         public void RegistraNavigation(NavigationPage navPage)
         {

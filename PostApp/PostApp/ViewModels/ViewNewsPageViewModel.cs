@@ -74,7 +74,7 @@ namespace PostApp.ViewModels
                     NewsSelezionata.thankyou++;
                 else
                 {
-                    if(envelop?.response == StatusCodes.EDITOR_NEWS_GIA_RINGRAZIATO)
+                    if(envelop?.response == StatusCodes.NEWS_GIA_RINGRAZIATO)
                     {
 
                     }

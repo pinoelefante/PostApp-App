@@ -22,13 +22,13 @@ namespace PostApp.Api
         
         public PostAppAPI()
         {
-            //inject DataService
             var cookieContainer = new CookieContainer();
             var handler = new HttpClientHandler() { CookieContainer = cookieContainer, UseCookies = true, AllowAutoRedirect = false };
             http = new HttpClient(handler);
             http.BaseAddress = new Uri(SERVER_ADDRESS);
             http.DefaultRequestHeaders.Add("User-Agent", "PostAppClient");
         }
+
         #region authentication.php
         public async Task<Envelop<string>> RequestAccessCode()
         {
@@ -63,6 +63,15 @@ namespace PostApp.Api
                 new KeyValuePair<string, string>("deviceOS", ((int)device).ToString())
             });
             return await sendRequest<string>($"{SERVER_ADDRESS}/authentication.php?action=RegistraPush", postContent);
+        }
+        public Task<Envelop<string>> CambiaLocalita(string localita)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Envelop<string>> UnRegistraPush(string token, PushDevice device)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 
@@ -498,6 +507,11 @@ namespace PostApp.Api
                 return new List<Editor>(1);
             },content);
         }
+        public Task<Envelop<List<News>>> GetNewsFromAllEditors(int idFrom)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region scuola.php
@@ -582,12 +596,98 @@ namespace PostApp.Api
             });
             return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=AccessoScuola", content);
         }
+        public Task<Envelop<string>> AggiungiPlesso(int idScuola, string nomePlesso)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Envelop<string>> RimuoviPlesso(int idScuola, int idPlesso)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Envelop<string>> AggiungiSezione(int idScuola, int idPlesso, int idGrado, int classeInizio, int classeFine, string letteraSezione)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Envelop<string>> RimuoviSezione(int idScuola, int idPlesso, int idGrado, string letteraSezione)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Envelop<string>> AggiungiGrado(int idScuola, string gradoNome)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Envelop<string>> RimuoviGrado(int idScuola, int idGrado)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Envelop<string>> AggiungiClasse(int idScuola, int idPlesso, int idGrado, int classe, string letteraSezione)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Envelop<string>> RimuoviClasse(int idScuola, int idPlesso, int idGrado, int classe, string letteraSezione)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Envelop<string>> SbloccaCodiceScuola(string codice)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Envelop<List<News>>> GetNewsMyScuole()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Envelop<List<News>>> GetNewsMyClassi()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Envelop<string>> ThankYouNewsScuola(int idNews)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Envelop<string>> ThankYouNewsClasse(int idNews)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Envelop<News>> LeggiNewsScuola(int idNews)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Envelop<string>> NotificaLetturaScuola(int idNews)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Envelop<News>> LeggiNewsClasse(int idNews)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Envelop<string>> NotificaLetturaClasse(int idNews)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
 
         private async Task<Envelop<T>> sendRequest<T>(string url, HttpContent postContent = null, bool loginRequired = true)
         {
-            if(loginRequired && !IsLogged)
+            Envelop<T> envelop = new Envelop<T>();
+
+            if (loginRequired && !IsLogged)
             {
                 var response = await Access(AccessCode);
                 if(response.response == StatusCodes.OK)
@@ -598,9 +698,10 @@ namespace PostApp.Api
                 else
                 {
                     Debug.WriteLine("Errore accesso");
+                    OnAccessCodeError?.Invoke();
+                    return envelop;
                 }
             }
-            Envelop<T> envelop = new Envelop<T>();
             try
             {
                 var response = await http.PostAsync(url, postContent);
@@ -635,6 +736,8 @@ namespace PostApp.Api
         }
         private async Task<Envelop<ContentType>> sendRequestWithAction<ContentType, ContentContainer>(string url, Func<ContentContainer, ContentType> parseAction, HttpContent postContent = null, bool loginRequired = true)
         {
+            Envelop<ContentType> envelop = new Envelop<ContentType>();
+
             if (parseAction == null)
                 return await sendRequest<ContentType>(url, postContent, loginRequired);
 
@@ -649,9 +752,11 @@ namespace PostApp.Api
                 else
                 {
                     Debug.WriteLine("Errore accesso");
+                    OnAccessCodeError?.Invoke();
+                    return envelop;
                 }
             }
-            Envelop<ContentType> envelop = new Envelop<ContentType>();
+            
             try
             {
                 var response = await http.PostAsync(url, postContent);
@@ -703,19 +808,33 @@ namespace PostApp.Api
         {
             if(ListaCategorie==null || ListaCategorie.Count == 0)
             {
-                ListaCategorie = new Dictionary<string, string>();
+                if(ListaCategorie == null)
+                    ListaCategorie = new Dictionary<string, string>();
+
                 ListaCategorie.Add("Comune", "Comune");
                 ListaCategorie.Add("Pro Loco", "ProLoco");
-                //ListaCategorie.Add("Comune", "Comune");
-                //ListaCategorie.Add("Comune", "Comune");
+                //ListaCategorie.Add("", "");
+                //ListaCategorie.Add("", "");
             }
             return ListaCategorie;
         }
-        private string AccessCode;
-        private bool IsLogged = false;
-        public void SetAccessCode(string code)
+        private Dictionary<string, string> ListaGradiScuola;
+        public Dictionary<string, string> GetListaGradiScuola()
         {
-            AccessCode = code;
+            if (ListaGradiScuola == null || !ListaGradiScuola.Any())
+            {
+                if (ListaGradiScuola == null)
+                    ListaGradiScuola = new Dictionary<string, string>();
+                ListaGradiScuola.Add("Scuola dell'infanzia", "materna");
+                ListaGradiScuola.Add("Scuola elementare", "primaria");
+                ListaGradiScuola.Add("Scuola media", "secondaria1");
+                ListaGradiScuola.Add("Scuola superiore", "secondaria2");
+                //ListaGradiScuola.Add("Università", "universita");
+            }
+            return ListaGradiScuola;
         }
+        private bool IsLogged = false;
+        public string AccessCode { get; set; }
+        public Action OnAccessCodeError { get; set; }
     }
 }
