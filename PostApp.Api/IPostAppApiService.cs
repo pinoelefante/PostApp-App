@@ -23,8 +23,8 @@ namespace PostApp.Api
         Task<Envelop<string>> Access(string accessCode);
         Task<Envelop<string>> CambiaLocalita(string localita);
         //"Ripristina utente"
-        Task<Envelop<string>> RegistraPush(string token, PushDevice device);
-        Task<Envelop<string>> UnRegistraPush(string token, PushDevice device);
+        Task<Envelop<string>> RegistraPush(string token, PushDevice device, string deviceId);
+        Task<Envelop<string>> UnRegistraPush(string token, PushDevice device, string deviceId);
 
         //editor.php
         Task<Envelop<string>> RegistraEditor(string nome, string categoria, string email, string telefono, string indirizzo, string localita);

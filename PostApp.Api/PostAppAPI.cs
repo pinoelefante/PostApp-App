@@ -55,12 +55,13 @@ namespace PostApp.Api
             Envelop<string> response = await sendRequest<string>($"{SERVER_ADDRESS}/authentication.php?action=RegisterAccessCode", postContent, false);
             return response;
         }
-        public async Task<Envelop<string>> RegistraPush(string token, PushDevice device)
+        public async Task<Envelop<string>> RegistraPush(string token, PushDevice device, string deviceId)
         {
             FormUrlEncodedContent postContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
             {
                 new KeyValuePair<string, string>("token",token),
-                new KeyValuePair<string, string>("deviceOS", ((int)device).ToString())
+                new KeyValuePair<string, string>("deviceOS", ((int)device).ToString()),
+                new KeyValuePair<string, string>("deviceId", deviceId)
             });
             return await sendRequest<string>($"{SERVER_ADDRESS}/authentication.php?action=RegistraPush", postContent);
         }
@@ -73,12 +74,13 @@ namespace PostApp.Api
             return await sendRequest<string>($"{SERVER_ADDRESS}/authentication.php?action=CambiaLocalita", postContent);
         }
 
-        public async Task<Envelop<string>> UnRegistraPush(string token, PushDevice device)
+        public async Task<Envelop<string>> UnRegistraPush(string token, PushDevice device,string deviceId)
         {
             FormUrlEncodedContent postContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
             {
                 new KeyValuePair<string, string>("token",token),
-                new KeyValuePair<string, string>("deviceOS",((int)device).ToString())
+                new KeyValuePair<string, string>("deviceOS",((int)device).ToString()),
+                new KeyValuePair<string, string>("deviceId", deviceId)
             });
             return await sendRequest<string>($"{SERVER_ADDRESS}/authentication.php?action=UnregisterPush", postContent);
         }

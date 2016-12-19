@@ -12,6 +12,7 @@ using PostApp.Api.Data;
 using Microsoft.Practices.ServiceLocation;
 using System.ComponentModel;
 using Plugin.SecureStorage;
+using Plugin.DeviceInfo;
 
 namespace PostApp.Services
 {
@@ -40,7 +41,7 @@ namespace PostApp.Services
             CrossSecureStorage.Current.SetValue("PushToken", token);
             CrossSecureStorage.Current.SetValue("PushTokenDevice", device.ToString());
             var postApp = App.Locator.GetService<IPostAppApiService>();
-            var envelop = await postApp.RegistraPush(token, device);
+            var envelop = await postApp.RegistraPush(token, device, CrossDeviceInfo.Current.Id);
             if (envelop.response == StatusCodes.OK)
                 CrossSecureStorage.Current.SetValue("PushTokenRegOK", "OK");
             else
@@ -64,30 +65,38 @@ namespace PostApp.Services
             }
             OnRegisteredAction?.Invoke(token, device);
         }
-        public Action OnUnregisteredAction = () =>
+        public Action<PushDevice> OnUnregisteredAction = async (device) =>
         {
-            CrossSecureStorage.Current.DeleteKey("PushToken");
-            CrossSecureStorage.Current.DeleteKey("PushTokenRegOK");
-            App.Locator.GetService<UserNotificationService>().ShowMessageDialog("Disattivazione notifiche", "Non riceverai ulteriori notifiche dall'applicazione");
+            var postApp = App.Locator.GetService<IPostAppApiService>();
+            var envelop = await postApp.UnRegistraPush(CrossSecureStorage.Current.GetValue("PushToken"), device, CrossDeviceInfo.Current.Id);
+            if (envelop.response == StatusCodes.OK)
+            {
+                CrossSecureStorage.Current.DeleteKey("PushTokenRegOK");
+                CrossSecureStorage.Current.DeleteKey("PushToken");
+            }
         };
         public void OnUnregistered(DeviceType deviceType)
         {
             Debug.WriteLine("Push Notification - Device Unnregistered");
-            OnUnregisteredAction?.Invoke();
+            PushDevice device = PushDevice.NOT_SET;
+            switch (deviceType)
+            {
+                case DeviceType.Android:
+                    device = PushDevice.ANDROID;
+                    break;
+                case DeviceType.iOS:
+                    device = PushDevice.IOS;
+                    break;
+                case DeviceType.Windows:
+                    device = PushDevice.WINDOWS_UWP;
+                    break;
+            }
+            OnUnregisteredAction?.Invoke(device);
         }
 
         public bool ShouldShowNotification()
         {
             return true;
-        }
-        private async void PostAppTokenReg(string token, PushDevice device)
-        {
-            var postApp = App.Locator.GetService<IPostAppApiService>();
-            var envelop = await postApp.RegistraPush(token, device);
-            if (envelop.response == StatusCodes.OK)
-                CrossSecureStorage.Current.SetValue("PushTokenRegOK", "OK");
-            else
-                App.Locator.GetService<UserNotificationService>().ShowMessageDialog("Registrazione notifiche fallito", "La registrazione ai servizi di notifiche è fallito");
         }
     }
 }

@@ -29,7 +29,7 @@ namespace PostApp.Droid
             //A great place to initialize Xamarin.Insights and Dependency Services!
             SecureStorageImplementation.StoragePassword = "kEW]xVU9ASQh";
             UserDialogs.Init(this);
-            CrossPushNotification.Initialize<CrossPushNotificationListener>("94884833542");
+            CrossPushNotification.Initialize<CrossPushNotificationListener>("1486387770");
             StartPushService();
         }
 

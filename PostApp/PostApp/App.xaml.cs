@@ -1,4 +1,5 @@
-﻿using Plugin.SecureStorage;
+﻿using Plugin.DeviceInfo;
+using Plugin.SecureStorage;
 using PostApp.Api;
 using PostApp.Api.Data;
 using PostApp.Services;
@@ -17,9 +18,15 @@ namespace PostApp
 {
     public partial class App : Application
     {
-        public App()
+        public App(string parameter = null)
         {
             InitializeComponent();
+
+            if (parameter != null)
+            {
+                Debug.WriteLine("AVVIO APP DA NOTIFICA");
+                Locator.GetService<UserNotificationService>().ShowMessageDialog("Notifica", parameter.ToString());
+            }
             Locator.RegisterPages();
             Page firstPage = null;
             if (CrossSecureStorage.Current.HasKey("AccessCode"))
@@ -32,28 +39,16 @@ namespace PostApp
         public static ViewModelLocator Locator => _locator ?? (_locator = new ViewModelLocator());
         protected override void OnStart()
         {
-            if (CrossSecureStorage.Current.HasKey("AccessCode") && !CrossSecureStorage.Current.HasKey("PushTokenRegOK"))
+            if (CrossSecureStorage.Current.HasKey("AccessCode"))
             {
-                if (CrossSecureStorage.Current.HasKey("PushToken")) //il token è stato già registrato nel server delle notifiche ma non in quello dell'app
+                if ((Device.OS == TargetPlatform.Android /*AND time reg maggiore 24h*/) || !CrossSecureStorage.Current.HasKey("PushTokenRegOK"))
                 {
-                    var token = CrossSecureStorage.Current.GetValue("PushToken");
-                    var deviceOs = (PushDevice)Enum.Parse(typeof(PushDevice), CrossSecureStorage.Current.GetValue("PushTokenDevice"));
-                    PostAppTokenReg(token, deviceOs);
-                }
-                else
+                    if (CrossSecureStorage.Current.HasKey("PushToken"))
+                        CrossPushNotification.Current.Unregister();
                     CrossPushNotification.Current.Register();
+                }
             }
         }
-        private async void PostAppTokenReg(string token, PushDevice device)
-        {
-            var postApp = Locator.GetService<IPostAppApiService>();
-            var envelop = await postApp.RegistraPush(token, device);
-            if (envelop.response == StatusCodes.OK)
-                CrossSecureStorage.Current.SetValue("PushTokenRegOK", "OK");
-            else
-                Locator.GetService<UserNotificationService>().ShowMessageDialog("Registrazione notifiche fallito", "La registrazione ai servizi di notifiche è fallito");
-        }
-
         protected override void OnSleep()
         {
             // Handle when your app sleeps
