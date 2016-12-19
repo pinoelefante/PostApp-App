@@ -64,8 +64,8 @@ namespace PostApp.Api
         Task<Envelop<string>> RimuoviGrado(int idScuola, int idGrado);
         Task<Envelop<string>> AggiungiClasse(int idScuola, int idPlesso, int idGrado, int classe, string letteraSezione);
         Task<Envelop<string>> RimuoviClasse(int idScuola, int idPlesso, int idGrado, int classe, string letteraSezione);
-        Task<Envelop<string>> SbloccaCodiceScuola(string codice);
-        //"PostaNewsScuola"
+        Task<Envelop<string>> SbloccaCodiceFamigliaScuola(string codice, string nome, string cognome, string data);
+        Task<Envelop<string>> PostaNewsScuola(int idScuola, string titolo, string corpoNews, string immagine, IEnumerable<string> destinatati);
         //"PostaNewsClasse"
         //"GetNewsScuola"
         //"GetNewsClassi"

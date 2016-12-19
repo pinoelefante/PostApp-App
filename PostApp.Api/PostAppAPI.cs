@@ -64,14 +64,23 @@ namespace PostApp.Api
             });
             return await sendRequest<string>($"{SERVER_ADDRESS}/authentication.php?action=RegistraPush", postContent);
         }
-        public Task<Envelop<string>> CambiaLocalita(string localita)
+        public async Task<Envelop<string>> CambiaLocalita(string localita)
         {
-            throw new NotImplementedException();
+            FormUrlEncodedContent postContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("localita",localita)
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/authentication.php?action=CambiaLocalita", postContent);
         }
 
-        public Task<Envelop<string>> UnRegistraPush(string token, PushDevice device)
+        public async Task<Envelop<string>> UnRegistraPush(string token, PushDevice device)
         {
-            throw new NotImplementedException();
+            FormUrlEncodedContent postContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("token",token),
+                new KeyValuePair<string, string>("deviceOS",((int)device).ToString())
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/authentication.php?action=UnregisterPush", postContent);
         }
         #endregion
 
@@ -596,49 +605,122 @@ namespace PostApp.Api
             });
             return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=AccessoScuola", content);
         }
-        public Task<Envelop<string>> AggiungiPlesso(int idScuola, string nomePlesso)
+        public async Task<Envelop<string>> AggiungiPlesso(int idScuola, string nomePlesso)
         {
-            throw new NotImplementedException();
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idScuola",idScuola.ToString()),
+                new KeyValuePair<string, string>("nomePlesso",nomePlesso)
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=AggiungiPlesso", content);
         }
 
-        public Task<Envelop<string>> RimuoviPlesso(int idScuola, int idPlesso)
+        public async Task<Envelop<string>> RimuoviPlesso(int idScuola, int idPlesso)
         {
-            throw new NotImplementedException();
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idScuola",idScuola.ToString()),
+                new KeyValuePair<string, string>("idPlesso",idPlesso.ToString())
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=RimuoviPlesso", content);
         }
 
-        public Task<Envelop<string>> AggiungiSezione(int idScuola, int idPlesso, int idGrado, int classeInizio, int classeFine, string letteraSezione)
+        public async Task<Envelop<string>> AggiungiSezione(int idScuola, int idPlesso, int idGrado, int classeInizio, int classeFine, string letteraSezione)
         {
-            throw new NotImplementedException();
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idScuola",idScuola.ToString()),
+                new KeyValuePair<string, string>("idPlesso",idPlesso.ToString()),
+                new KeyValuePair<string, string>("idGrado",idGrado.ToString()),
+                new KeyValuePair<string, string>("classeInizio",classeInizio.ToString()),
+                new KeyValuePair<string, string>("classeFine",classeFine.ToString()),
+                new KeyValuePair<string, string>("sezione",letteraSezione)
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=AggiungiSezione", content);
         }
 
-        public Task<Envelop<string>> RimuoviSezione(int idScuola, int idPlesso, int idGrado, string letteraSezione)
+        public async Task<Envelop<string>> RimuoviSezione(int idScuola, int idPlesso, int idGrado, string letteraSezione)
         {
-            throw new NotImplementedException();
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idScuola",idScuola.ToString()),
+                new KeyValuePair<string, string>("idPlesso",idPlesso.ToString()),
+                new KeyValuePair<string, string>("idGrado",idGrado.ToString()),
+                new KeyValuePair<string, string>("sezione",letteraSezione)
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=RimuoviSezione", content);
         }
 
-        public Task<Envelop<string>> AggiungiGrado(int idScuola, string gradoNome)
+        public async Task<Envelop<string>> AggiungiGrado(int idScuola, string gradoNome)
         {
-            throw new NotImplementedException();
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idScuola",idScuola.ToString()),
+                new KeyValuePair<string, string>("grado",gradoNome)
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=AggiungiGrado", content);
         }
 
-        public Task<Envelop<string>> RimuoviGrado(int idScuola, int idGrado)
+        public async Task<Envelop<string>> RimuoviGrado(int idScuola, int idGrado)
         {
-            throw new NotImplementedException();
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idScuola",idScuola.ToString()),
+                new KeyValuePair<string, string>("idGrado",idGrado.ToString())
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=RimuoviGrado", content);
         }
 
-        public Task<Envelop<string>> AggiungiClasse(int idScuola, int idPlesso, int idGrado, int classe, string letteraSezione)
+        public async Task<Envelop<string>> AggiungiClasse(int idScuola, int idPlesso, int idGrado, int classe, string letteraSezione)
         {
-            throw new NotImplementedException();
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idScuola",idScuola.ToString()),
+                new KeyValuePair<string, string>("idPlesso",idPlesso.ToString()),
+                new KeyValuePair<string, string>("idGrado",idGrado.ToString()),
+                new KeyValuePair<string, string>("classe",classe.ToString()),
+                new KeyValuePair<string, string>("sezione",letteraSezione)
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=AggiungiClasse", content);
         }
 
-        public Task<Envelop<string>> RimuoviClasse(int idScuola, int idPlesso, int idGrado, int classe, string letteraSezione)
+        public async Task<Envelop<string>> RimuoviClasse(int idScuola, int idPlesso, int idGrado, int classe, string letteraSezione)
         {
-            throw new NotImplementedException();
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idScuola",idScuola.ToString()),
+                new KeyValuePair<string, string>("idPlesso",idPlesso.ToString()),
+                new KeyValuePair<string, string>("idGrado",idGrado.ToString()),
+                new KeyValuePair<string, string>("classe",classe.ToString()),
+                new KeyValuePair<string, string>("sezione",letteraSezione)
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=RimuoviClasse", content);
         }
 
-        public Task<Envelop<string>> SbloccaCodiceScuola(string codice)
+        public async Task<Envelop<string>> SbloccaCodiceFamigliaScuola(string codice, string nome, string cognome, string data)
         {
-            throw new NotImplementedException();
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("codice",codice),
+                new KeyValuePair<string, string>("nome",nome),
+                new KeyValuePair<string, string>("cognome",cognome),
+                new KeyValuePair<string, string>("nascita",data)
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=SbloccaCodiceFamiglia", content);
+        }
+        public async Task<Envelop<string>> PostaNewsScuola(int idScuola, string titolo, string corpoNews, string immagine, IEnumerable<string> destinatati)
+        {
+            var parameters = new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idScuola",idScuola.ToString()),
+                new KeyValuePair<string, string>("titolo",titolo),
+                new KeyValuePair<string, string>("corpo",corpoNews),
+                new KeyValuePair<string, string>("image",immagine)
+            };
+            foreach (var item in destinatati)
+                parameters.Add(new KeyValuePair<string, string>("destinatari[]", item));
+            FormUrlEncodedContent content = new FormUrlEncodedContent(parameters);
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=SbloccaCodiceFamiglia", content);
         }
 
         public Task<Envelop<List<News>>> GetNewsMyScuole()
@@ -651,34 +733,98 @@ namespace PostApp.Api
             throw new NotImplementedException();
         }
 
-        public Task<Envelop<string>> ThankYouNewsScuola(int idNews)
+        public async Task<Envelop<string>> ThankYouNewsScuola(int idNews)
         {
-            throw new NotImplementedException();
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idNews",idNews.ToString())
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=ThankYouNewsScuola", content);
         }
 
-        public Task<Envelop<string>> ThankYouNewsClasse(int idNews)
+        public async Task<Envelop<string>> ThankYouNewsClasse(int idNews)
         {
-            throw new NotImplementedException();
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idNews",idNews.ToString())
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=ThankYouNewsClasse", content);
         }
 
-        public Task<Envelop<News>> LeggiNewsScuola(int idNews)
+        public async Task<Envelop<News>> LeggiNewsScuola(int idNews)
         {
-            throw new NotImplementedException();
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idNews",idNews.ToString())
+            });
+            return await sendRequestWithAction<News, Dictionary<string, string>>($"{SERVER_ADDRESS}/scuola.php?action=LeggiNewsScuola", (item) =>
+            {
+                if(item!=null && item.Any())
+                {
+                    News n = new News()
+                    {
+                        publisherId = Int32.Parse(item["scuolaId"]),
+                        publisherNome = item["scuolaNome"],
+                        id = Int32.Parse(item["newsId"]),
+                        titolo = item["titolo"],
+                        testo = item["corpo"],
+                        immagine = item["immagine"],
+                        data = DateTime.Parse(item["data"], CultureInfo.InvariantCulture),
+                        thankyou = Int32.Parse(item["thankyou"]),
+                        tipoNews = NewsType.SCUOLA_NEWS
+                        //TODO aggiungere notificata, letta
+                    };
+                    return n;
+                }
+                return null;
+            }, content);
         }
 
-        public Task<Envelop<string>> NotificaLetturaScuola(int idNews)
+        public async Task<Envelop<string>> NotificaLetturaScuola(int idNews)
         {
-            throw new NotImplementedException();
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idNews",idNews.ToString())
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=NotificaLetturaScuola", content);
         }
 
-        public Task<Envelop<News>> LeggiNewsClasse(int idNews)
+        public async Task<Envelop<News>> LeggiNewsClasse(int idNews)
         {
-            throw new NotImplementedException();
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idNews",idNews.ToString())
+            });
+            return await sendRequestWithAction<News, Dictionary<string, string>>($"{SERVER_ADDRESS}/scuola.php?action=LeggiNewsClasse", (item) =>
+            {
+                if (item != null && item.Any())
+                {
+                    News n = new News()
+                    {
+                        publisherId = Int32.Parse(item["classeId"]),
+                        publisherNome = item["classeNome"],
+                        id = Int32.Parse(item["newsId"]),
+                        titolo = item["titolo"],
+                        testo = item["corpo"],
+                        immagine = item["immagine"],
+                        data = DateTime.Parse(item["data"], CultureInfo.InvariantCulture),
+                        thankyou = Int32.Parse(item["thankyou"]),
+                        tipoNews = NewsType.SCUOLA_CLASSE_NEWS
+                        //TODO aggiungere notificata, letta
+                    };
+                    return n;
+                }
+                return null;
+            }, content);
         }
 
-        public Task<Envelop<string>> NotificaLetturaClasse(int idNews)
+        public async Task<Envelop<string>> NotificaLetturaClasse(int idNews)
         {
-            throw new NotImplementedException();
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idNews",idNews.ToString())
+            });
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=NotificaLetturaClasse", content);
         }
         #endregion
 

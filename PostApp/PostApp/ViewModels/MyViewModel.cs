@@ -16,5 +16,9 @@ namespace PostApp.ViewModels
         {
 
         }
+        public virtual void NavigatedFrom()
+        {
+
+        }
     }
 }
