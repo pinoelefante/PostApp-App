@@ -12,6 +12,7 @@
     "sqlite-net-pcl": "1.2.1",
     "Xam.Plugin.DeviceInfo": "2.0.2",
     "Xam.Plugin.ExternalMaps": "3.0.0",
+    "Xam.Plugin.FilePicker": "1.1.0",
     "Xam.Plugin.Geolocator": "3.0.4",
     "Xam.Plugin.PushNotification": "1.2.4",
     "Xam.Plugins.Notifier": "2.0.2",

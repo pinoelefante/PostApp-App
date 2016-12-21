@@ -25,6 +25,7 @@ namespace PostApp.ViewModels
         public const string ViewEditorPage = "ViewEditorPage";
         public const string CercaEditorPage = "CercaEditorPage";
         public const string CittaPage = "CittaPage";
+        public const string LoginPage = "LoginPage";
 
         private static NavigationService nav;
         static ViewModelLocator()
@@ -34,7 +35,11 @@ namespace PostApp.ViewModels
             SimpleIoc.Default.Register<INavigationService>(()=>nav);
             var dbService = DependencyService.Get<ISQLite>();
             SimpleIoc.Default.Register<ISQLite>(() => dbService);
-            SimpleIoc.Default.Register<IPostAppApiService, PostAppAPI>();
+            var postApp = new PostAppAPI();
+            /*TODO decommentare per email/password login
+            postApp.OnAccessCodeError = () => { nav.NavigateTo(LoginPage); nav.ClearBackstack(); };
+            */
+            SimpleIoc.Default.Register<IPostAppApiService>(() => postApp);
             SimpleIoc.Default.Register<UserNotificationService>();
             SimpleIoc.Default.Register<ValidationService>();
             SimpleIoc.Default.Register<LocationService>();

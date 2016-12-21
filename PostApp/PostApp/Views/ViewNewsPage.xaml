@@ -33,7 +33,7 @@
 
         <Label Grid.Row="0" Text="{Binding NewsSelezionata.titolo}" FontAttributes="Bold" FontSize="24" />
         
-        <Grid HeightRequest="240" IsVisible="{Binding NewsSelezionata.immagine, Converter={StaticResource NullBoolean}}">
+        <Grid Grid.Row="1" HeightRequest="240" IsVisible="{Binding NewsSelezionata.immagine, Converter={StaticResource NullBoolean}}">
           <Image Source="{Binding NewsSelezionata.immagineFull, Converter={StaticResource imgConverter}}" Aspect="AspectFit"/>
         </Grid>
         

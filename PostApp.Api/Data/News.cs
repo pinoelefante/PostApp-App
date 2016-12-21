@@ -25,7 +25,9 @@ namespace PostApp.Api.Data
             {
                 if (string.IsNullOrEmpty(immagine))
                     return null;
-                return $"thumb.{immagine}";
+                var filename = immagine.Substring(immagine.LastIndexOf('/') + 1);
+                var path = immagine.Substring(0, immagine.LastIndexOf('/') + 1);
+                return $"{path}thumb.{filename}";
             }
         }
         public string immagineFull

@@ -10,7 +10,7 @@ namespace PostApp.Converters
 {
     public class ImagePathToUrlConverter : IValueConverter
     {
-        private static readonly string IMAGE_SERVER = ""; 
+        private static readonly string IMAGE_SERVER = "http://gestioneserietv.altervista.org/postAppTest/"; 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if(value == null)

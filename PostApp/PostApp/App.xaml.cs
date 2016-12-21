@@ -41,13 +41,21 @@ namespace PostApp
         {
             if (CrossSecureStorage.Current.HasKey("AccessCode"))
             {
-                if ((Device.OS == TargetPlatform.Android /*AND time reg maggiore 24h*/) || !CrossSecureStorage.Current.HasKey("PushTokenRegOK"))
+                if (!CrossSecureStorage.Current.HasKey("PushTokenRegOK") || (Device.OS == TargetPlatform.Android && PushRegistrableTime()))
                 {
                     if (CrossSecureStorage.Current.HasKey("PushToken"))
                         CrossPushNotification.Current.Unregister();
                     CrossPushNotification.Current.Register();
                 }
             }
+        }
+        private bool PushRegistrableTime()
+        {
+            if (!CrossSecureStorage.Current.HasKey("PushRegistrationTime"))
+                return true;
+            DateTime timeReg = new DateTime(long.Parse(CrossSecureStorage.Current.GetValue("PushRegistrationTime")));
+            var span = DateTime.Now.Subtract(timeReg);
+            return span.Days > 2;
         }
         protected override void OnSleep()
         {

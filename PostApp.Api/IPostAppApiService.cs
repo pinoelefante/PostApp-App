@@ -32,8 +32,8 @@ namespace PostApp.Api
         Task<Envelop<List<Editor>>> WriterEditorsDaApprovare();
         Task<Envelop<List<Editor>>> ReaderEditors();
         Task<Envelop<string>> AddDescrizioneEditor(int idEditor, string descrizione);
-        Task<Envelop<string>> AddEditorImage(int idEditor, string immagineBase64);
-        Task<Envelop<string>> PostEditor(int idEditor, string titolo, string corpo, string img, string posizione);
+        Task<Envelop<string>> AddEditorImage(int idEditor, byte[] immagineBytes);
+        Task<Envelop<string>> PostEditor(int idEditor, string titolo, string corpo, byte[] img, string posizione);
         Task<Envelop<string>> FollowEditor(int idEditor);
         Task<Envelop<string>> UnfollowEditor(int idEditor);
         Task<Envelop<List<News>>> GetNotificationsEditor(DateTime from);
@@ -65,7 +65,7 @@ namespace PostApp.Api
         Task<Envelop<string>> AggiungiClasse(int idScuola, int idPlesso, int idGrado, int classe, string letteraSezione);
         Task<Envelop<string>> RimuoviClasse(int idScuola, int idPlesso, int idGrado, int classe, string letteraSezione);
         Task<Envelop<string>> SbloccaCodiceFamigliaScuola(string codice, string nome, string cognome, string data);
-        Task<Envelop<string>> PostaNewsScuola(int idScuola, string titolo, string corpoNews, string immagine, IEnumerable<string> destinatati);
+        Task<Envelop<string>> PostaNewsScuola(int idScuola, string titolo, string corpoNews, byte[] immagine, IEnumerable<string> destinatati);
         //"PostaNewsClasse"
         //"GetNewsScuola"
         //"GetNewsClassi"

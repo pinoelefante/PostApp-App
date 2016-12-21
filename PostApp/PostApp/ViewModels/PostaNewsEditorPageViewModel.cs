@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
+using Plugin.FilePicker;
 using PostApp.Api;
 using PostApp.Api.Data;
 using PostApp.Services;
@@ -29,6 +30,14 @@ namespace PostApp.ViewModels
         {
             CaricaWriters();   
         }
+        public override void NavigatedFrom()
+        {
+            _immagineByteArray = null;
+            TitoloNews = string.Empty;
+            CorpoNews = string.Empty;
+            PosizioneNews = string.Empty;
+            ImmagineNews = string.Empty;
+        }
         private async void CaricaWriters()
         {
 
@@ -42,14 +51,15 @@ namespace PostApp.ViewModels
             }
         }
         private string _titolo = string.Empty, _corpo = string.Empty, _posizione = string.Empty, _immagine = string.Empty;
+        private byte[] _immagineByteArray;
         private int _editorSelezionato = -1;
         public List<Editor> ListaEditor { get; set; }
         public int EditorSelezionato { get { return _editorSelezionato; } set { Set(ref _editorSelezionato, value); } }
         public string TitoloNews { get { return _titolo; } set { Set(ref _titolo, value); } }
         public string CorpoNews { get { return _corpo; } set { Set(ref _corpo, value); } }
         public string PosizioneNews { get { return _posizione; } set { Set(ref _posizione, value); } }
-        public string Immagine { get { return _immagine; } set { Set(ref _immagine, value); } }
-        private RelayCommand _inviaNewsCmd, _locationCmd;
+        public string ImmagineNews { get { return _immagine; } set { Set(ref _immagine, value); } }
+        private RelayCommand _inviaNewsCmd, _locationCmd, _immagineCmd;
         public RelayCommand LocationCommand =>
             _locationCmd ??
             (_locationCmd = new RelayCommand(async () =>
@@ -73,7 +83,7 @@ namespace PostApp.ViewModels
             {
                 if (VerificaCampi(true))
                 {
-                    var res = await postApp.PostEditor(ListaEditor[EditorSelezionato].id, TitoloNews, CorpoNews, Immagine, PosizioneNews.Trim());
+                    var res = await postApp.PostEditor(ListaEditor[EditorSelezionato].id, TitoloNews, CorpoNews, _immagineByteArray, PosizioneNews?.Trim());
                     if(res.response == StatusCodes.OK)
                     {
                         notification.ShowMessageDialog("Invio notizia", "Notizia inviata con successo");
@@ -81,6 +91,17 @@ namespace PostApp.ViewModels
                     }
                     else
                         notification.ShowMessageDialog("Invio notizia", $"Errore durante l'invio della notizia.\nStatusCode: {res.response}");
+                }
+            }));
+        public RelayCommand ImmagineCommand =>
+            _immagineCmd ??
+            (_immagineCmd = new RelayCommand(async () =>
+            {
+                var file = await CrossFilePicker.Current.PickFile();
+                if(file!=null)
+                {
+                    ImmagineNews = file.FileName;
+                    _immagineByteArray = file.DataArray;
                 }
             }));
         private bool VerificaCampi(bool notify = false)

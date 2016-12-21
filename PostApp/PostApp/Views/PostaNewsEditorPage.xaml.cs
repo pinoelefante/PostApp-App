@@ -30,6 +30,11 @@ namespace PostApp.Views
             base.OnAppearing();
             VM.NavigatedTo();
         }
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            VM.NavigatedFrom();
+        }
         private void CaricaEditorPicker()
         {
             editorPicker.Items?.Clear();

@@ -175,25 +175,23 @@ namespace PostApp.Api
             });
             return await sendRequest<string>($"{SERVER_ADDRESS}/editor.php?action=AddDescrizione", content);
         }
-        public async Task<Envelop<string>> AddEditorImage(int idEditor, string immagineBase64)
+        public async Task<Envelop<string>> AddEditorImage(int idEditor, byte[] immagine)
         {
-            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
-            {
-                new KeyValuePair<string, string>("immagine",immagineBase64), //TODO verificare correttezza
-                new KeyValuePair<string, string>("idEditor",idEditor.ToString())
-            });
+            MultipartFormDataContent content = new MultipartFormDataContent();
+            content.Add(new StringContent(idEditor.ToString()), "idEditor");
+            if(immagine!=null)
+                content.Add(new ByteArrayContent(immagine), "immagine");
             return await sendRequest<string>($"{SERVER_ADDRESS}/editor.php?action=AddEditorImage", content);
         }
-        public async Task<Envelop<string>> PostEditor(int idEditor, string titolo, string corpo, string img, string posizione)
+        public async Task<Envelop<string>> PostEditor(int idEditor, string titolo, string corpo, byte[] img, string posizione)
         {
-            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
-            {
-                new KeyValuePair<string, string>("editor",idEditor.ToString()),
-                new KeyValuePair<string, string>("titolo",titolo),
-                new KeyValuePair<string, string>("corpo",corpo),
-                new KeyValuePair<string, string>("img",img),
-                new KeyValuePair<string, string>("posizione",posizione),
-            });
+            MultipartFormDataContent content = new MultipartFormDataContent();
+            content.Add(new StringContent(idEditor.ToString()), "editor");
+            content.Add(new StringContent(titolo), "titolo");
+            content.Add(new StringContent(corpo), "corpo");
+            content.Add(new StringContent(posizione), "posizione");
+            if(img!=null)
+                content.Add(new ByteArrayContent(img), "img");
             return await sendRequest<string>($"{SERVER_ADDRESS}/editor.php?action=Post", content);
         }
         public async Task<Envelop<string>> FollowEditor(int idEditor)
@@ -710,18 +708,16 @@ namespace PostApp.Api
             });
             return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=SbloccaCodiceFamiglia", content);
         }
-        public async Task<Envelop<string>> PostaNewsScuola(int idScuola, string titolo, string corpoNews, string immagine, IEnumerable<string> destinatati)
+        public async Task<Envelop<string>> PostaNewsScuola(int idScuola, string titolo, string corpoNews, byte[] immagine, IEnumerable<string> destinatati)
         {
-            var parameters = new List<KeyValuePair<string, string>>()
-            {
-                new KeyValuePair<string, string>("idScuola",idScuola.ToString()),
-                new KeyValuePair<string, string>("titolo",titolo),
-                new KeyValuePair<string, string>("corpo",corpoNews),
-                new KeyValuePair<string, string>("image",immagine)
-            };
+            MultipartFormDataContent content = new MultipartFormDataContent();
+            content.Add(new StringContent(idScuola.ToString()), "idScuola");
+            content.Add(new StringContent(titolo), "titolo");
+            content.Add(new StringContent(corpoNews), "corpo");
+            if(immagine!=null)
+                content.Add(new ByteArrayContent(immagine), "immagine");
             foreach (var item in destinatati)
-                parameters.Add(new KeyValuePair<string, string>("destinatari[]", item));
-            FormUrlEncodedContent content = new FormUrlEncodedContent(parameters);
+                content.Add(new StringContent(item), "destinatari[]");
             return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=SbloccaCodiceFamiglia", content);
         }
 

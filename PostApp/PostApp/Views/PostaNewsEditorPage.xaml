@@ -41,7 +41,6 @@
         <StackLayout>
           <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
             <Label Text="Posizione della news" TextColor="Gray"/>
-            <Label Text="(*)" TextColor="Red" />
           </StackLayout>
           <Grid>
             <Grid.ColumnDefinitions>
@@ -49,8 +48,27 @@
               <ColumnDefinition Width="Auto"/>
               <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Entry Grid.Column="0" HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding PosizioneNews, Mode=TwoWay}"/>
+            <StackLayout Grid.Column="0">
+              <Entry HorizontalOptions="FillAndExpand" VerticalOptions="Center" TextColor="Black" Text="{Binding PosizioneNews, Mode=TwoWay}"/>
+            </StackLayout>
             <Button Grid.Column="1" Image="currentPosition.png" BackgroundColor="Transparent" BorderColor="Transparent" BorderWidth="0" Command="{Binding LocationCommand}"/>
+          </Grid>
+        </StackLayout>
+
+        <StackLayout>
+          <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
+            <Label Text="Immagine della news" TextColor="Gray"/>
+          </StackLayout>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackLayout Grid.Column="0">
+              <Entry HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding ImmagineNews, Mode=TwoWay}" IsEnabled="False"/>
+            </StackLayout>
+            <Button Grid.Column="1" Text="Image" BackgroundColor="Transparent" BorderColor="Transparent" BorderWidth="0" Command="{Binding ImmagineCommand}"/>
           </Grid>
         </StackLayout>
 
