@@ -977,8 +977,30 @@ namespace PostApp.Api
             }
             return ListaGradiScuola;
         }
+        private Dictionary<string, string> ListaElencoRuoliScuoli;
+        public Dictionary<string, string> GetElencoRuoliScuola()
+        {
+            if(ListaElencoRuoliScuoli == null || !ListaElencoRuoliScuoli.Any())
+            {
+                if (ListaElencoRuoliScuoli == null)
+                    ListaElencoRuoliScuoli = new Dictionary<string, string>();
+                ListaElencoRuoliScuoli.Add("Genitori", DestinatarioScuolaGenitore);
+                ListaElencoRuoliScuoli.Add("Studenti", DestinatarioScuolaStudente);
+                ListaElencoRuoliScuoli.Add("Docenti", DestinatarioScuolaDocente);
+                ListaElencoRuoliScuoli.Add("Personale ATA", DestinatarioScuolaAta);
+                ListaElencoRuoliScuoli.Add("Preside", DestinatarioScuolaPreside);
+            }
+            return ListaElencoRuoliScuoli;
+        }
+
         private bool IsLogged = false;
         public string AccessCode { get; set; }
         public Action OnAccessCodeError { get; set; }
+
+        public string DestinatarioScuolaGenitore { get { return "genitore"; } }
+        public string DestinatarioScuolaStudente { get { return "studente"; } }
+        public string DestinatarioScuolaPreside { get { return "preside"; } }
+        public string DestinatarioScuolaAta { get { return "ata"; } }
+        public string DestinatarioScuolaDocente { get { return "docente"; } }
     }
 }

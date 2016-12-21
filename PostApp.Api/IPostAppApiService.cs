@@ -10,10 +10,16 @@ namespace PostApp.Api
 {
     public interface IPostAppApiService
     {
+        string DestinatarioScuolaGenitore { get; }
+        string DestinatarioScuolaStudente { get; }
+        string DestinatarioScuolaPreside { get; }
+        string DestinatarioScuolaAta { get; }
+        string DestinatarioScuolaDocente { get; }
         //generici
         ObservableCollection<Comune> GetListaComuni();
         Dictionary<string, string> GetListaCategorie();
         Dictionary<string, string> GetListaGradiScuola();
+        Dictionary<string, string> GetElencoRuoliScuola();
         Action OnAccessCodeError { get; set; }
         string AccessCode { get; set; }
 

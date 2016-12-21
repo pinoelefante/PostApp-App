@@ -26,6 +26,7 @@ namespace PostApp.ViewModels
         public const string CercaEditorPage = "CercaEditorPage";
         public const string CittaPage = "CittaPage";
         public const string LoginPage = "LoginPage";
+        public const string PostaNewsScuolaPage = "PostaNewsScuolaPage";
 
         private static NavigationService nav;
         static ViewModelLocator()
@@ -57,6 +58,7 @@ namespace PostApp.ViewModels
             SimpleIoc.Default.Register<ViewNewsPageViewModel>();
             SimpleIoc.Default.Register<CercaEditorPageViewModel>();
             SimpleIoc.Default.Register<CittaPageViewModel>();
+            SimpleIoc.Default.Register<PostaNewsScuolaViewModel>();
         }
         public void RegisterPages()
         {
@@ -65,6 +67,7 @@ namespace PostApp.ViewModels
             nav.Configure(ViewModelLocator.FirstAccessPage, typeof(FirstAccessPage));
             nav.Configure(ViewModelLocator.MainPage, typeof(MainPage));
             nav.Configure(ViewModelLocator.PostaNewsEditorPage, typeof(PostaNewsEditorPage));
+            nav.Configure(ViewModelLocator.PostaNewsScuolaPage, typeof(PostaNewsScuolaPage));
             nav.Configure(ViewModelLocator.RegistraEditorPage, typeof(RegistraEditorPage));
             nav.Configure(ViewModelLocator.RegistraScuolaPage, typeof(RegistraScuolaPage));
             nav.Configure(ViewModelLocator.ViewEditorPage, typeof(ViewEditorPage));
@@ -84,5 +87,6 @@ namespace PostApp.ViewModels
         public ViewEditorPageViewModel ViewEditorPageVM => ServiceLocator.Current.GetInstance<ViewEditorPageViewModel>();
         public CercaEditorPageViewModel CercaEditorPageVM => ServiceLocator.Current.GetInstance<CercaEditorPageViewModel>();
         public CittaPageViewModel CittaPageVM => ServiceLocator.Current.GetInstance<CittaPageViewModel>();
+        public PostaNewsScuolaViewModel PostaNewsScuolaVM => ServiceLocator.Current.GetInstance<PostaNewsScuolaViewModel>();
     }
 }
