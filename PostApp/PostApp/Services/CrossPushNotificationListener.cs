@@ -40,7 +40,7 @@ namespace PostApp.Services
         {
             CrossSecureStorage.Current.SetValue("PushToken", token);
             CrossSecureStorage.Current.SetValue("PushTokenDevice", device.ToString());
-            CrossSecureStorage.Current.SetValue("PushRegistrationTime", DateTime.Now.ToBinary().ToString())
+            CrossSecureStorage.Current.SetValue("PushRegistrationTime", DateTime.Now.ToBinary().ToString());
             var postApp = App.Locator.GetService<IPostAppApiService>();
             var envelop = await postApp.RegistraPush(token, device, CrossDeviceInfo.Current.Id);
             if (envelop.response == StatusCodes.OK)
