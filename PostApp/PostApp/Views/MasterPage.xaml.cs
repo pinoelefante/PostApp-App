@@ -59,6 +59,12 @@ namespace PostApp.Views
 
             masterPageItems.Add(new MasterPageItem
             {
+                Title = "Pubblica news scuola",
+                Command = ViewModelLocator.PostaNewsScuolaPage
+            });
+
+            masterPageItems.Add(new MasterPageItem
+            {
                 Title = "Elenco città",
                 //IconSource = "todo.png",
                 Command = ViewModelLocator.CittaPage

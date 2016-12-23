@@ -9,14 +9,21 @@ using Xamarin.Forms;
 
 namespace PostApp.Views
 {
-    public partial class PostaNewsScuolaPage : ContentPage
+    public partial class PostaNewsScuolaPage : TabbedPage
     {
         public PostaNewsScuolaPage()
         {
             InitializeComponent();
-            this.BindingContext = App.Locator.PostaNewsScuolaVM;
+            PostaNewsScuolaViewModel vm = App.Locator.PostaNewsScuolaVM;
+            this.BindingContext = vm;
+            vm.PropertyChanged += Vm_PropertyChanged;
         }
         public PostaNewsScuolaViewModel VM => this.BindingContext as PostaNewsScuolaViewModel;
+        private void Vm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals(nameof(VM.ElencoScuole)))
+                CaricaScuolePicker();
+        }
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -26,6 +33,15 @@ namespace PostApp.Views
         {
             base.OnDisappearing();
             VM.NavigatedFrom();
+        }
+        private void CaricaScuolePicker()
+        {
+            editorPicker.Items?.Clear();
+            if (VM.ElencoScuole != null)
+            {
+                foreach (var item in VM.ElencoScuole)
+                    editorPicker.Items.Add(item.nome);
+            }
         }
     }
 }

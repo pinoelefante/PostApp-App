@@ -1,12 +1,111 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PostApp.Views.PostaNewsScuolaPage">
-  <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition />
-      <RowDefinition Height="Auto"/>
-    </Grid.RowDefinitions>
-    
-  </Grid>
-</ContentPage>
+             x:Class="PostApp.Views.PostaNewsScuolaPage"
+             xmlns:conv="clr-namespace:PostApp.Converters;assembly=PostApp"
+             Title="Pubblica notizia scuola">
+  <TabbedPage.Resources>
+    <ResourceDictionary>
+      <conv:NotBoolean x:Key="NotBoolean"/>
+    </ResourceDictionary>
+  </TabbedPage.Resources>
+  <ContentPage Title="Scuola">
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition />
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <ScrollView Margin="16,0,0,0" Padding="0,0,16,0">
+        <StackLayout>
+
+          <StackLayout>
+            <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
+              <Label Text="Titolo della news" TextColor="Gray"/>
+              <Label Text="(*)" TextColor="Red" />
+            </StackLayout>
+            <Entry HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding TitoloNews, Mode=TwoWay}" Placeholder="Titolo della news"/>
+          </StackLayout>
+
+          <StackLayout>
+            <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
+              <Label Text="Contenuto della news" TextColor="Gray"/>
+              <Label Text="(*)" TextColor="Red" />
+            </StackLayout>
+            <ScrollView>
+              <Editor HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding CorpoNews, Mode=TwoWay}" HeightRequest="250"/>
+            </ScrollView>
+          </StackLayout>
+
+          <StackLayout>
+            <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
+              <Label Text="Pubblica per" TextColor="Gray"/>
+              <Label Text="(*)" TextColor="Red" />
+            </StackLayout>
+            <Picker x:Name="editorPicker" SelectedIndex="{Binding ScuolaSelezionata, Mode=TwoWay}"/>
+          </StackLayout>
+
+          <StackLayout>
+            <StackLayout Orientation="Horizontal" Margin="0,16,0,0">
+              <Label Text="Immagine della news" TextColor="Gray"/>
+            </StackLayout>
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <StackLayout Grid.Column="0">
+                <Entry HorizontalOptions="FillAndExpand" TextColor="Black" Text="{Binding ImmagineNews, Mode=TwoWay}" IsEnabled="False"/>
+              </StackLayout>
+              <Button Grid.Column="1" Text="Image" BackgroundColor="Transparent" BorderColor="Transparent" BorderWidth="0" Command="{Binding ImmagineCommand}"/>
+            </Grid>
+          </StackLayout>
+
+          <!-- destinatari -->
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.ColumnSpan="2" Text="Destinatari" TextColor="Gray"/>
+            
+            <Label Grid.Row="1" Grid.Column="0" HorizontalTextAlignment="End" VerticalOptions="Center" Text="Tutti"/>
+            <Switch Grid.Row="1" Grid.Column="1" IsToggled="{Binding DestinatariAll, Mode=TwoWay}"/>
+
+            <Label Grid.Row="2" Grid.Column="0" HorizontalTextAlignment="End" VerticalOptions="Center" Text="Genitori"/>
+            <Switch Grid.Row="2" Grid.Column="1" IsToggled="{Binding DestinatariGenitori, Mode=TwoWay}" IsEnabled="{Binding DestinatariAll, Converter={StaticResource NotBoolean}}"/>
+
+            <Label Grid.Row="3" Grid.Column="0" HorizontalTextAlignment="End" VerticalOptions="Center" Text="Studenti"/>
+            <Switch Grid.Row="3" Grid.Column="1" IsToggled="{Binding DestinatariStudenti, Mode=TwoWay}" IsEnabled="{Binding DestinatariAll, Converter={StaticResource NotBoolean}}"/>
+
+            <Label Grid.Row="4" Grid.Column="0" HorizontalTextAlignment="End" VerticalOptions="Center" Text="Docenti"/>
+            <Switch Grid.Row="4" Grid.Column="1" IsToggled="{Binding DestinatariDocenti, Mode=TwoWay}" IsEnabled="{Binding DestinatariAll, Converter={StaticResource NotBoolean}}"/>
+
+            <Label Grid.Row="5" Grid.Column="0" HorizontalTextAlignment="End" VerticalOptions="Center" Text="Personale ATA"/>
+            <Switch Grid.Row="5" Grid.Column="1" IsToggled="{Binding DestinatariAta, Mode=TwoWay}" IsEnabled="{Binding DestinatariAll, Converter={StaticResource NotBoolean}}"/>
+
+            <Label Grid.Row="6" Grid.Column="0" HorizontalTextAlignment="End" VerticalOptions="Center" Text="Preside"/>
+            <Switch Grid.Row="6" Grid.Column="1" IsToggled="{Binding DestinatariPreside, Mode=TwoWay}" IsEnabled="{Binding DestinatariAll, Converter={StaticResource NotBoolean}}"/>
+          </Grid>
+
+          <Button Text="Pubblica" HorizontalOptions="FillAndExpand" VisualElement.HeightRequest="60" Command="{Binding PostaNewsScuola}" />
+        </StackLayout>
+      </ScrollView>
+    </Grid>
+  </ContentPage>
+
+  <ContentPage Title="Classi">
+    <Label Text="qui vanno le classi"/>
+  </ContentPage>
+
+</TabbedPage>
