@@ -36,7 +36,7 @@ namespace PostApp.ViewModels
             TitoloNews = string.Empty;
             CorpoNews = string.Empty;
             if (ElencoScuole.Any())
-                ScuolaSelezionata = 0;
+                ScuolaSelezionata = -1;
             ImmagineNews = string.Empty;
             _immagineByteArray = null;
             ClassiDisponibili?.Clear();
@@ -52,12 +52,14 @@ namespace PostApp.ViewModels
             {
                 foreach (var item in response.content)
                     ElencoScuole.Add(item);
-
+                RaisePropertyChanged(() => ElencoScuole);
                 if (!ElencoScuole.Any())
                 {
                     notification.ShowMessageDialog("Scuole disponibili", "Non sei autorizzato a postare per nessuna scuola.\nSe questo è un errore, riprova più tardi o contatta l'assistenza.", () => navigation.NavigateTo(ViewModelLocator.MainPage));
                     return;
                 }
+                else if (ElencoScuole.Count == 1)
+                    ScuolaSelezionata = -1;
             }
             else
             {
@@ -164,11 +166,20 @@ namespace PostApp.ViewModels
         private string _titolo = string.Empty, _corpo = string.Empty, _immagine = string.Empty, _sezione = string.Empty;
         private byte[] _immagineByteArray;
         private int _scuolaSelezionata = -1;
-        public int ScuolaSelezionata { get { return _scuolaSelezionata; } set { Set(ref _scuolaSelezionata, value); CaricaClassi(); } }
+        public int ScuolaSelezionata
+        {
+            get { return _scuolaSelezionata; }
+            set
+            {
+                Set(ref _scuolaSelezionata, value);
+                if(value >= 0)
+                    CaricaClassi();
+            }
+        }
         public string TitoloNews { get { return _titolo; } set { Set(ref _titolo, value); } }
         public string CorpoNews { get { return _corpo; } set { Set(ref _corpo, value); } }
         public string ImmagineNews { get { return _immagine; } set { Set(ref _immagine, value); } }
-        private RelayCommand _immagineCmd, _postaNewsScuolaCmd;
+        private RelayCommand _immagineCmd, _postaNewsScuolaCmd, _postaNewsClasseCmd;
         public RelayCommand ImmagineCommand =>
             _immagineCmd ??
             (_immagineCmd = new RelayCommand(async () =>
@@ -197,10 +208,10 @@ namespace PostApp.ViewModels
                 }
             }));
         public RelayCommand PostaNewsClasse =>
-            _postaNewsScuolaCmd ??
-            (_postaNewsScuolaCmd = new RelayCommand(async () =>
+            _postaNewsClasseCmd ??
+            (_postaNewsClasseCmd = new RelayCommand(async () =>
             {
-                if (VerificaCampiScuola(true))
+                if (VerificaCampiClasse(true))
                 {
                     DestinatariAta = false;
                     DestinatariDocenti = false;
@@ -268,8 +279,15 @@ namespace PostApp.ViewModels
             {
                 item.IsSelected = !item.IsSelected;
             }));
+        private bool loadingClassi = false;
         private async void CaricaClassi()
         {
+            if (loadingClassi)
+                return;
+            loadingClassi = true;
+            if (ScuolaSelezionata < 0 || ScuolaSelezionata >= ElencoScuole.Count)
+                return;
+
             ClassiDisponibili?.Clear();
             int prove = 0;
             bool ok = false;
@@ -291,11 +309,12 @@ namespace PostApp.ViewModels
                     break;
                 }
                 prove++;
-            } while (prove <= 3);
+            } while (prove < 3);
             if (ok && !ClassiDisponibili.Any())
                 notification.ShowMessageDialog("Classi della scuola", "Non sono presenti classi per cui postare news");
             if (!ok)
                 notification.ShowMessageDialog("Errore", "Si è verificato un errore durante il caricamento delle classi.\nRiprova più tardi");
+            loadingClassi = false;
         }
     }
 }
