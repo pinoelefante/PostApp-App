@@ -37,10 +37,14 @@ namespace PostApp.Views
         private void CaricaScuolePicker()
         {
             editorPicker.Items?.Clear();
+            editorPicker2.Items?.Clear();
             if (VM.ElencoScuole != null)
             {
                 foreach (var item in VM.ElencoScuole)
+                {
                     editorPicker.Items.Add(item.nome);
+                    editorPicker2.Items.Add(item.nome);
+                }
             }
         }
     }

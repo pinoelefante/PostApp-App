@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Views;
 using Plugin.FilePicker;
 using PostApp.Api;
 using PostApp.Api.Data;
+using PostApp.Controls;
 using PostApp.Services;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,18 @@ namespace PostApp.ViewModels
             Destinatari.Clear();
             CaricaElencoScuole();
         }
+        public override void NavigatedFrom()
+        {
+            DestinatariAll = false;
+            TitoloNews = string.Empty;
+            CorpoNews = string.Empty;
+            if (ElencoScuole.Any())
+                ScuolaSelezionata = 0;
+            ImmagineNews = string.Empty;
+            _immagineByteArray = null;
+            ClassiDisponibili?.Clear();
+            ClassiSelezionate?.Clear();
+        }
         public ObservableCollection<Scuola> ElencoScuole { get; } = new ObservableCollection<Scuola>();
         private async void CaricaElencoScuole()
         {
@@ -42,13 +55,19 @@ namespace PostApp.ViewModels
 
                 if (!ElencoScuole.Any())
                 {
-                    //L'utente non ha scuole per cui pubblicare
-                    //TODO mostrare un dialog e tornare alla home
+                    notification.ShowMessageDialog("Scuole disponibili", "Non sei autorizzato a postare per nessuna scuola.\nSe questo è un errore, riprova più tardi o contatta l'assistenza.", () => navigation.NavigateTo(ViewModelLocator.MainPage));
+                    return;
                 }
             }
             else
             {
-                //TODO mostra dialogo per ricaricare
+                notification.ConfirmDialog("Scuole disponibili", $"Si è verificato un errore di comunicazione.\nErrore: {response.response}", (action) =>
+                {
+                    if (action)
+                        CaricaElencoScuole();
+                    else
+                        navigation.NavigateTo(ViewModelLocator.MainPage);
+                }, "Riprova", "Chiudi");
             }
             IsBusyActive = false;
         }
@@ -142,14 +161,13 @@ namespace PostApp.ViewModels
             }
         }
         private List<string> Destinatari { get; } = new List<string>();
-        private string _titolo = string.Empty, _corpo = string.Empty, _immagine = string.Empty;
+        private string _titolo = string.Empty, _corpo = string.Empty, _immagine = string.Empty, _sezione = string.Empty;
         private byte[] _immagineByteArray;
-        private int _editorSelezionato = -1;
-        public int ScuolaSelezionata { get { return _editorSelezionato; } set { Set(ref _editorSelezionato, value); } }
+        private int _scuolaSelezionata = -1;
+        public int ScuolaSelezionata { get { return _scuolaSelezionata; } set { Set(ref _scuolaSelezionata, value); CaricaClassi(); } }
         public string TitoloNews { get { return _titolo; } set { Set(ref _titolo, value); } }
         public string CorpoNews { get { return _corpo; } set { Set(ref _corpo, value); } }
         public string ImmagineNews { get { return _immagine; } set { Set(ref _immagine, value); } }
-
         private RelayCommand _immagineCmd, _postaNewsScuolaCmd;
         public RelayCommand ImmagineCommand =>
             _immagineCmd ??
@@ -169,6 +187,25 @@ namespace PostApp.ViewModels
                 if (VerificaCampiScuola(true))
                 {
                     var res = await api.PostaNewsScuola(ElencoScuole[ScuolaSelezionata].id, TitoloNews.Trim(), CorpoNews.Trim(), _immagineByteArray, Destinatari);
+                    if (res.response == StatusCodes.OK)
+                    {
+                        notification.ShowMessageDialog("Invio notizia", "Notizia inviata con successo");
+                        navigation.NavigateTo(ViewModelLocator.MainPage);
+                    }
+                    else
+                        notification.ShowMessageDialog("Invio notizia", $"Errore durante l'invio della notizia.\nStatusCode: {res.response}");
+                }
+            }));
+        public RelayCommand PostaNewsClasse =>
+            _postaNewsScuolaCmd ??
+            (_postaNewsScuolaCmd = new RelayCommand(async () =>
+            {
+                if (VerificaCampiScuola(true))
+                {
+                    DestinatariAta = false;
+                    DestinatariDocenti = false;
+                    DestinatariPreside = false;
+                    var res = await api.PostaNewsClasse(ElencoScuole[ScuolaSelezionata].id, TitoloNews.Trim(), CorpoNews.Trim(), _immagineByteArray, Destinatari, ClassiSelezionate.Select(x => x.Id));
                     if (res.response == StatusCodes.OK)
                     {
                         notification.ShowMessageDialog("Invio notizia", "Notizia inviata con successo");
@@ -205,6 +242,60 @@ namespace PostApp.ViewModels
                 return false;
             }
             return true;
+        }
+        private bool VerificaCampiClasse(bool notify = false)
+        {
+            if (VerificaCampiScuola(true))
+            {
+                var found = ClassiDisponibili.Where(x => x.IsSelected).Select(x => x.Item).ToList();
+                if(found == null || !found.Any())
+                {
+                    if (notify)
+                        notification.ShowMessageDialog("Verifica dati", "Devi selezionare almeno una classe");
+                    return false;
+                }
+                ClassiSelezionate = found;
+                return true;
+            }
+            return false;
+        }
+        public ObservableCollection<SelectableItemWrapper<Classe>> ClassiDisponibili { get; } = new ObservableCollection<SelectableItemWrapper<Classe>>();
+        private List<Classe> ClassiSelezionate { get; set; }
+        private RelayCommand<SelectableItemWrapper<Classe>> _classeSelectCmd;
+        public RelayCommand<SelectableItemWrapper<Classe>> ClasseTapped =>
+            _classeSelectCmd ??
+            (_classeSelectCmd = new RelayCommand<SelectableItemWrapper<Classe>>((item) =>
+            {
+                item.IsSelected = !item.IsSelected;
+            }));
+        private async void CaricaClassi()
+        {
+            ClassiDisponibili?.Clear();
+            int prove = 0;
+            bool ok = false;
+            do
+            {
+                var envelop = await api.ElencoClassiScuola(ElencoScuole[ScuolaSelezionata].id);
+                if(envelop.response == StatusCodes.OK)
+                {
+                    ok = true;
+                    foreach (var classe in envelop.content)
+                        ClassiDisponibili.Add
+                        (
+                            new SelectableItemWrapper<Classe>()
+                            {
+                                IsSelected = false,
+                                Item = classe
+                            }
+                        );
+                    break;
+                }
+                prove++;
+            } while (prove <= 3);
+            if (ok && !ClassiDisponibili.Any())
+                notification.ShowMessageDialog("Classi della scuola", "Non sono presenti classi per cui postare news");
+            if (!ok)
+                notification.ShowMessageDialog("Errore", "Si è verificato un errore durante il caricamento delle classi.\nRiprova più tardi");
         }
     }
 }

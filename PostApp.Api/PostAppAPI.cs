@@ -696,7 +696,34 @@ namespace PostApp.Api
             });
             return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=RimuoviClasse", content);
         }
-
+        public async Task<Envelop<List<Classe>>> ElencoClassiScuola(int idScuola)
+        {
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("idScuola",idScuola.ToString())
+            });
+            return await sendRequestWithAction<List<Classe>, List<Dictionary<string, string>>>($"{SERVER_ADDRESS}/scuola.php?action=ListaClassi", (x) =>
+            {
+                if (x != null && x.Any())
+                {
+                    List<Classe> classi = new List<Classe>(x.Count);
+                    foreach (var item in x)
+                    {
+                        Classe s = new Classe()
+                        {
+                            Id = Int32.Parse(item["idClasse"]),
+                            ClasseNo = Int32.Parse(item["classe"]),
+                            Sezione = item["sezione"],
+                            Grado = item["grado"],
+                            Plesso = item["plesso"]
+                        };
+                        classi.Add(s);
+                    }
+                    return classi;
+                }
+                return new List<Classe>(1);
+            }, content, true);
+        }
         public async Task<Envelop<string>> SbloccaCodiceFamigliaScuola(string codice, string nome, string cognome, string data)
         {
             FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>()
@@ -718,7 +745,21 @@ namespace PostApp.Api
                 content.Add(new ByteArrayContent(immagine), "immagine");
             foreach (var item in destinatati)
                 content.Add(new StringContent(item), "destinatari[]");
-            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=SbloccaCodiceFamiglia", content);
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=PostaNewsScuola", content);
+        }
+        public async Task<Envelop<string>> PostaNewsClasse(int idScuola, string titolo, string corpoNews, byte[] immagine, IEnumerable<string> destinatati, IEnumerable<int> idClassi)
+        {
+            MultipartFormDataContent content = new MultipartFormDataContent();
+            content.Add(new StringContent(idScuola.ToString()), "idScuola");
+            content.Add(new StringContent(titolo), "titolo");
+            content.Add(new StringContent(corpoNews), "corpo");
+            if (immagine != null)
+                content.Add(new ByteArrayContent(immagine), "immagine");
+            foreach (var item in destinatati)
+                content.Add(new StringContent(item), "destinatari[]");
+            foreach (var item in idClassi)
+                content.Add(new StringContent(item.ToString()), "classi[]");
+            return await sendRequest<string>($"{SERVER_ADDRESS}/scuola.php?action=PostaNewsClasse", content);
         }
 
         public Task<Envelop<List<News>>> GetNewsMyScuole()

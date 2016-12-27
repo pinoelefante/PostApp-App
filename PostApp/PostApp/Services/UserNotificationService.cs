@@ -24,14 +24,14 @@ namespace PostApp.Services
                 OnAction = action
             });
         }
-        public void ConfirmDialog(string titolo, string messaggio, Action<bool> action = null)
+        public void ConfirmDialog(string titolo, string messaggio, Action<bool> action = null, string OkText = "Si", string cancelText = "No")
         {
             UserDialogs.Instance.Confirm(new ConfirmConfig()
             {
                 Title = titolo,
                 Message = messaggio,
-                CancelText = "No",
-                OkText = "Si",
+                CancelText = cancelText,
+                OkText = OkText,
                 OnAction = action
             });
         }

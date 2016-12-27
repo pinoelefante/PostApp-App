@@ -45,7 +45,7 @@ namespace PostApp
                 {
                     if (CrossSecureStorage.Current.HasKey("PushToken"))
                         CrossPushNotification.Current.Unregister();
-                    CrossPushNotification.Current.Register();
+                    //CrossPushNotification.Current.Register();
                 }
             }
         }

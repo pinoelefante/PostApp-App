@@ -20,6 +20,7 @@ namespace PostApp.Api.Data
     }
     public enum StatusCodes
     {
+        METHOD_NOT_IMPLEMENTED = -1000,
         ERRORE_SERVER = -500, //errore presente solo sul client
         ERRORE_CONNESSIONE = -501, //errore presente solo sul client
         

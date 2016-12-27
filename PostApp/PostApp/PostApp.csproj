@@ -43,6 +43,7 @@
     <Compile Include="Controls\Accordion.cs" />
     <Compile Include="Controls\AutoCompleteView.cs" />
     <Compile Include="Controls\MasterPageItem.cs" />
+    <Compile Include="Controls\SelectableItemWrapper.cs" />
     <Compile Include="Converters\DateTimeString.cs" />
     <Compile Include="Converters\ImagePathToUrlConverter.cs" />
     <Compile Include="Converters\IntBoolean.cs" />
